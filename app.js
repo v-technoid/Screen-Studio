@@ -1,29 +1,46 @@
 (function(){
 
-  // ---------- mobile & capabilities detection ----------
+  // ---------- strict capability detection ----------
   function handleMobileDeviceCapabilities(){
-    var isMobileOS = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || ('ontouchstart' in window && window.innerWidth < 800);
-    var lacksDisplayMedia = !(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
+    var canRecordScreen = !!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
     
-    if(isMobileOS || lacksDisplayMedia){
-      // Hide live recording controls & show fallback banner
-      var recAudioOptions = document.getElementById('recAudioOptions');
-      var recControlsRow = document.getElementById('recControlsRow');
-      var recHintText = document.getElementById('recHintText');
-      var mobileRecFallback = document.getElementById('mobileRecFallback');
+    var recAudioOptions = document.getElementById('recAudioOptions');
+    var recControlsRow = document.getElementById('recControlsRow');
+    var recHintText = document.getElementById('recHintText');
+    var mobileRecFallback = document.getElementById('mobileRecFallback');
+    var securityRecFallback = document.getElementById('securityRecFallback');
 
-      if(recAudioOptions) recAudioOptions.hidden = true;
-      if(recControlsRow) recControlsRow.hidden = true;
-      if(recHintText) recHintText.hidden = true;
+    var shotButtonsRow = document.getElementById('shotButtonsRow');
+    var shotHintText = document.getElementById('shotHintText');
+    var mobileShotFallback = document.getElementById('mobileShotFallback');
+
+    // 1. Force hide all warning banners by default
+    if(mobileRecFallback) mobileRecFallback.hidden = true;
+    if(securityRecFallback) securityRecFallback.hidden = true;
+    if(mobileShotFallback) mobileShotFallback.hidden = true;
+
+    // 2. If screen recording works (like on your laptop), stop here! Show ZERO banners.
+    if(canRecordScreen){
+      if(recAudioOptions) recAudioOptions.hidden = false;
+      if(recControlsRow) recControlsRow.hidden = false;
+      if(recHintText) recHintText.hidden = false;
+      if(shotButtonsRow) shotButtonsRow.hidden = false;
+      if(shotHintText) shotHintText.hidden = false;
+      return;
+    }
+
+    // 3. Only if screen recording is blocked, hide live controls and show the correct banner:
+    if(recAudioOptions) recAudioOptions.hidden = true;
+    if(recControlsRow) recControlsRow.hidden = true;
+    if(recHintText) recHintText.hidden = true;
+    if(shotButtonsRow) shotButtonsRow.hidden = true;
+    if(shotHintText) shotHintText.hidden = true;
+
+    var isInsecure = (window.location.protocol === 'file:' || !window.isSecureContext);
+    if(isInsecure){
+      if(securityRecFallback) securityRecFallback.hidden = false;
+    } else {
       if(mobileRecFallback) mobileRecFallback.hidden = false;
-
-      // Hide live screenshot capture buttons & show fallback banner
-      var shotButtonsRow = document.getElementById('shotButtonsRow');
-      var shotHintText = document.getElementById('shotHintText');
-      var mobileShotFallback = document.getElementById('mobileShotFallback');
-
-      if(shotButtonsRow) shotButtonsRow.hidden = true;
-      if(shotHintText) shotHintText.hidden = true;
       if(mobileShotFallback) mobileShotFallback.hidden = false;
     }
   }
@@ -144,37 +161,88 @@
 
   var recSystemAudioEl = document.getElementById('recSystemAudio');
   var recMicAudioEl = document.getElementById('recMicAudio');
+  var recWebcamPipEl = document.getElementById('recWebcamPip');
 
   if(startRecBtn){
     startRecBtn.addEventListener('click', async function(){
       try{
         var wantsSystemAudio = recSystemAudioEl && recSystemAudioEl.checked;
         var wantsMicAudio = recMicAudioEl && recMicAudioEl.checked;
+        var wantsWebcamPip = recWebcamPipEl && recWebcamPipEl.checked;
 
-        // 1. Get Screen / Tab Video (and System Audio if requested)
-        var displayMediaOptions = {
+        var displayStream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
           audio: wantsSystemAudio ? { echoCancellation: true, noiseSuppression: true } : false
-        };
-        var displayStream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+        });
 
-        // 2. Get External / Built-in Microphone Audio if requested
         var micStream = null;
-        if(wantsMicAudio){
+        var webcamStream = null;
+
+        if(wantsMicAudio || wantsWebcamPip){
           try{
-            micStream = await navigator.mediaDevices.getUserMedia({
-              audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
-              video: false
+            var userStream = await navigator.mediaDevices.getUserMedia({
+              audio: wantsMicAudio ? { echoCancellation: true, noiseSuppression: true } : false,
+              video: wantsWebcamPip ? { width: 400, height: 400 } : false
             });
-          }catch(micErr){
-            alert('Could not access microphone: ' + micErr.message + '\nContinuing without microphone audio.');
+            if(wantsMicAudio && userStream.getAudioTracks().length > 0) micStream = new MediaStream([userStream.getAudioTracks()[0]]);
+            if(wantsWebcamPip && userStream.getVideoTracks().length > 0) webcamStream = new MediaStream([userStream.getVideoTracks()[0]]);
+          }catch(userErr){
+            alert('Could not access hardware: ' + userErr.message + '\nContinuing without mic/webcam overlay.');
           }
         }
 
-        // 3. Combine Video & Audio Tracks into a Single Stream
-        var combinedStream = new MediaStream();
-        displayStream.getVideoTracks().forEach(function(track){ combinedStream.addTrack(track); });
+        var videoTrackToRecord = displayStream.getVideoTracks()[0];
+        var pipCanvas = null, pipCtx = null, pipAnimId = null;
+        var tempScreenVid = null, tempCamVid = null;
 
+        if(webcamStream){
+          pipCanvas = document.createElement('canvas');
+          pipCtx = pipCanvas.getContext('2d');
+          
+          tempScreenVid = document.createElement('video');
+          tempScreenVid.srcObject = displayStream;
+          tempScreenVid.muted = true;
+          await tempScreenVid.play();
+
+          tempCamVid = document.createElement('video');
+          tempCamVid.srcObject = webcamStream;
+          tempCamVid.muted = true;
+          await tempCamVid.play();
+
+          pipCanvas.width = tempScreenVid.videoWidth || 1920;
+          pipCanvas.height = tempScreenVid.videoHeight || 1080;
+
+          function renderPipLoop(){
+            if(!pipCtx) return;
+            pipCtx.drawImage(tempScreenVid, 0, 0, pipCanvas.width, pipCanvas.height);
+            
+            var pipSize = Math.floor(pipCanvas.width * 0.16);
+            var pad = Math.floor(pipCanvas.width * 0.02);
+            var cx = pipCanvas.width - pipSize/2 - pad;
+            var cy = pipCanvas.height - pipSize/2 - pad;
+
+            pipCtx.save();
+            pipCtx.beginPath();
+            pipCtx.arc(cx, cy, pipSize/2, 0, Math.PI * 2);
+            pipCtx.clip();
+            pipCtx.drawImage(tempCamVid, cx - pipSize/2, cy - pipSize/2, pipSize, pipSize);
+            pipCtx.restore();
+
+            pipCtx.save();
+            pipCtx.beginPath();
+            pipCtx.arc(cx, cy, pipSize/2, 0, Math.PI * 2);
+            pipCtx.strokeStyle = '#2563eb';
+            pipCtx.lineWidth = Math.max(4, pipCanvas.width * 0.004);
+            pipCtx.stroke();
+            pipCtx.restore();
+
+            pipAnimId = requestAnimationFrame(renderPipLoop);
+          }
+          renderPipLoop();
+          videoTrackToRecord = pipCanvas.captureStream(30).getVideoTracks()[0];
+        }
+
+        var combinedStream = new MediaStream([videoTrackToRecord]);
         var audioTracksToMix = [];
         if(displayStream.getAudioTracks().length > 0) audioTracksToMix.push(displayStream.getAudioTracks()[0]);
         if(micStream && micStream.getAudioTracks().length > 0) audioTracksToMix.push(micStream.getAudioTracks()[0]);
@@ -202,6 +270,7 @@
         mediaRecorder.ondataavailable = function(e){ if(e.data.size > 0) recordedChunks.push(e.data); };
         
         mediaRecorder.onstop = function(){
+          if(pipAnimId) cancelAnimationFrame(pipAnimId);
           var blob = new Blob(recordedChunks, { type: 'video/webm' });
           recordedBlobUrl = URL.createObjectURL(blob);
           recDownloadLink.href = recordedBlobUrl;
@@ -210,6 +279,7 @@
           
           displayStream.getTracks().forEach(function(t){ t.stop(); });
           if(micStream) micStream.getTracks().forEach(function(t){ t.stop(); });
+          if(webcamStream) webcamStream.getTracks().forEach(function(t){ t.stop(); });
           combinedStream.getTracks().forEach(function(t){ t.stop(); });
           if(audioCtx && audioCtx.state !== 'closed') { try{ audioCtx.close(); }catch(e){} }
         };
@@ -264,6 +334,18 @@
   var regionList = document.getElementById('regionList');
   var activeTool = null;
   var drawing = false, drawStart = null, liveRect = null;
+
+  var watermarkImg = null;
+  var watermarkInput = document.getElementById('watermarkInput');
+  if(watermarkInput){
+    watermarkInput.addEventListener('change', function(){
+      var f = watermarkInput.files[0];
+      if(!f){ watermarkImg = null; return; }
+      var img = new Image();
+      img.onload = function(){ watermarkImg = img; drawCurrentFrame(); };
+      img.src = URL.createObjectURL(f);
+    });
+  }
 
   if(videoFileInput){
     videoFileInput.addEventListener('change', function(){
@@ -326,6 +408,7 @@
     ctx.filter = 'none';
     ctx.drawImage(sourceVideo, 0, 0, editCanvas.width, editCanvas.height);
     drawRegionsOnCanvas(ctx);
+    if(watermarkImg) drawWatermarkOnCanvas(ctx);
     if(liveRect) drawLiveRectPreview();
     var readoutTime = document.getElementById('readoutTime');
     if(readoutTime) readoutTime.textContent = fmt(sourceVideo.currentTime) + ' / ' + fmt(sourceVideo.duration);
@@ -334,7 +417,6 @@
   function drawRegionsOnCanvas(targetCtx){
     var curTime = sourceVideo.currentTime;
 
-    // Draw active blur regions
     regions.forEach(function(r){
       if(r.type === 'blur' && curTime >= r.startTime && curTime <= r.endTime){
         targetCtx.save();
@@ -347,7 +429,6 @@
       }
     });
 
-    // Draw active mark regions
     regions.forEach(function(r){
       if(r.type === 'mark' && curTime >= r.startTime && curTime <= r.endTime){
         targetCtx.save();
@@ -358,6 +439,26 @@
         targetCtx.restore();
       }
     });
+  }
+
+  function drawWatermarkOnCanvas(targetCtx){
+    if(!watermarkImg) return;
+    var posSel = document.getElementById('watermarkPosSelect');
+    var pos = posSel ? posSel.value : 'bottom-right';
+    var maxW = Math.floor(editCanvas.width * 0.15);
+    var scale = Math.min(1, maxW / watermarkImg.width);
+    var w = Math.floor(watermarkImg.width * scale);
+    var h = Math.floor(watermarkImg.height * scale);
+    var pad = Math.floor(editCanvas.width * 0.02);
+
+    var x = pad, y = pad;
+    if(pos.indexOf('right') !== -1) x = editCanvas.width - w - pad;
+    if(pos.indexOf('bottom') !== -1) y = editCanvas.height - h - pad;
+
+    targetCtx.save();
+    targetCtx.globalAlpha = 0.85;
+    targetCtx.drawImage(watermarkImg, x, y, w, h);
+    targetCtx.restore();
   }
 
   function drawLiveRectPreview(){
@@ -372,10 +473,18 @@
   var markToolBtn = document.getElementById('markToolBtn');
   var blurToolBtn = document.getElementById('blurToolBtn');
   var noToolBtn = document.getElementById('noToolBtn');
+  var undoRegionBtn = document.getElementById('undoRegionBtn');
 
   if(markToolBtn) markToolBtn.addEventListener('click', function(){ setTool('mark'); });
   if(blurToolBtn) blurToolBtn.addEventListener('click', function(){ setTool('blur'); });
   if(noToolBtn) noToolBtn.addEventListener('click', function(){ setTool(null); });
+  if(undoRegionBtn){
+    undoRegionBtn.addEventListener('click', function(){
+      regions.pop();
+      renderRegionList();
+      drawCurrentFrame();
+    });
+  }
 
   function setTool(tool){
     activeTool = tool;
@@ -484,6 +593,84 @@
     });
   }
 
+  // ---------- save & load project (.json) ----------
+  var saveProjectBtn = document.getElementById('saveProjectBtn');
+  var loadProjectBtn = document.getElementById('loadProjectBtn');
+  var projectFileInput = document.getElementById('projectFileInput');
+
+  if(saveProjectBtn){
+    saveProjectBtn.addEventListener('click', function(){
+      if(!sourceVideo.src){ alert('No video loaded yet!'); return; }
+      var projectData = {
+        version: '1.0',
+        trimStart: parseFloat(trimStart.value),
+        trimEnd: parseFloat(trimEnd.value),
+        regions: regions
+      };
+      var blob = new Blob([JSON.stringify(projectData, null, 2)], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = 'screen-studio-project.json';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    });
+  }
+
+  if(loadProjectBtn && projectFileInput){
+    loadProjectBtn.addEventListener('click', function(){ projectFileInput.click(); });
+    projectFileInput.addEventListener('change', function(){
+      var f = projectFileInput.files[0];
+      if(!f) return;
+      var reader = new FileReader();
+      reader.onload = function(e){
+        try{
+          var data = JSON.parse(e.target.result);
+          if(data.regions) regions = data.regions;
+          if(data.trimStart !== undefined) trimStart.value = data.trimStart;
+          if(data.trimEnd !== undefined) trimEnd.value = data.trimEnd;
+          updateLabels();
+          renderRegionList();
+          drawCurrentFrame();
+          alert('Project settings loaded successfully!');
+        }catch(err){
+          alert('Invalid project file format.');
+        }
+      };
+      reader.readAsText(f);
+    });
+  }
+
+  // ---------- pro keyboard shortcuts ----------
+  window.addEventListener('keydown', function(e){
+    if(e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') return;
+    var editorSec = document.getElementById('editor');
+    if(!editorSec || editorSec.getBoundingClientRect().top > window.innerHeight || editorSec.getBoundingClientRect().bottom < 0) return;
+    if(!sourceVideo.src) return;
+
+    if(e.code === 'Space'){
+      e.preventDefault();
+      if(sourceVideo.paused) sourceVideo.play();
+      else sourceVideo.pause();
+    } else if(e.code === 'ArrowLeft'){
+      e.preventDefault();
+      sourceVideo.currentTime = Math.max(0, sourceVideo.currentTime - (1/30));
+      if(scrub) scrub.value = sourceVideo.currentTime;
+      updateLabels();
+    } else if(e.code === 'ArrowRight'){
+      e.preventDefault();
+      sourceVideo.currentTime = Math.min(sourceVideo.duration, sourceVideo.currentTime + (1/30));
+      if(scrub) scrub.value = sourceVideo.currentTime;
+      updateLabels();
+    } else if(e.key === 'm' || e.key === 'M'){
+      setTool('mark');
+    } else if(e.key === 'b' || e.key === 'B'){
+      setTool('blur');
+    } else if(e.key === 'z' || e.key === 'Z'){
+      regions.pop();
+      renderRegionList();
+      drawCurrentFrame();
+    }
+  });
+
   // ---- export ----
   var exportBtn = document.getElementById('exportBtn');
   var exportProgressWrap = document.getElementById('exportProgressWrap');
@@ -501,12 +688,15 @@
       var end = parseFloat(trimEnd.value);
       var duration = end - start;
 
+      var speedSel = document.getElementById('exportSpeedSelect');
+      var speedMult = speedSel ? parseFloat(speedSel.value) : 1;
+
       var stream = editCanvas.captureStream(30);
       
       var removeAudioEl = document.getElementById('exportRemoveAudio');
       var shouldRemoveAudio = removeAudioEl && removeAudioEl.checked;
 
-      if(!shouldRemoveAudio){
+      if(!shouldRemoveAudio && speedMult === 1){
         try{
           var vidStream = sourceVideo.captureStream ? sourceVideo.captureStream() : (sourceVideo.mozCaptureStream ? sourceVideo.mozCaptureStream() : null);
           if(vidStream && vidStream.getAudioTracks().length > 0){
@@ -534,19 +724,24 @@
 
       rec.start();
       sourceVideo.play();
+      sourceVideo.playbackRate = speedMult;
 
       function step(){
         ctx.filter = 'none';
         ctx.drawImage(sourceVideo, 0, 0, editCanvas.width, editCanvas.height);
         drawRegionsOnCanvas(ctx);
+        if(watermarkImg) drawWatermarkOnCanvas(ctx);
+        
         var progress = Math.min(100, ((sourceVideo.currentTime - start) / duration) * 100);
         exportProgressBar.style.width = progress + '%';
         var readoutTime = document.getElementById('readoutTime');
         if(readoutTime) readoutTime.textContent = fmt(sourceVideo.currentTime) + ' / ' + fmt(sourceVideo.duration);
+        
         if(sourceVideo.currentTime < end && !sourceVideo.paused){
           requestAnimationFrame(step);
         } else {
           sourceVideo.pause();
+          sourceVideo.playbackRate = 1;
           rec.stop();
         }
       }
@@ -554,8 +749,8 @@
 
       var blob = await finished;
       var url = URL.createObjectURL(blob);
-      var dlName = shouldRemoveAudio ? 'muted-video.webm' : 'edited-video.webm';
-      exportResult.innerHTML = '<a class="link-btn" href="' + url + '" download="' + dlName + '"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download ' + (shouldRemoveAudio ? 'muted' : 'edited') + ' video</a>';
+      var dlName = (shouldRemoveAudio || speedMult !== 1) ? 'pro-video.webm' : 'edited-video.webm';
+      exportResult.innerHTML = '<a class="link-btn" href="' + url + '" download="' + dlName + '"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Download final video (' + speedMult + 'x)</a>';
       exportProgressBar.style.width = '100%';
       exportBtn.disabled = false;
     });
@@ -728,7 +923,6 @@
     });
   }
 
-  // ---- capture then select an area ----
   var areaPicker = document.getElementById('shotAreaPicker');
   var areaCanvas = document.getElementById('areaPickCanvas');
   var actx = areaCanvas ? areaCanvas.getContext('2d') : null;
