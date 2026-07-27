@@ -77,12 +77,12 @@
         <a class="tool-card reveal" href="#record">
           <span class="tool-icon rec"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg></span>
           <span class="tool-name">Screen Recorder</span>
-          <span class="tool-desc">Capture your screen and audio, with support for external mics and meetings.</span>
+          <span class="tool-desc">Capture screen, webcam overlay (PiP), and mixed audio tracks.</span>
         </a>
         <a class="tool-card reveal" href="#editor">
           <span class="tool-icon edit"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>
           <span class="tool-name">Trim, Mark &amp; Blur</span>
-          <span class="tool-desc">Cut your clip, highlight a spot, blur out sensitive info, or remove audio.</span>
+          <span class="tool-desc">Cut clips, blur areas, adjust speed, add watermarks, and save projects.</span>
         </a>
         <a class="tool-card reveal" href="#audio">
           <span class="tool-icon audio"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="12" x2="4" y2="12"/><line x1="8" y1="8" x2="8" y2="16"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="16" y1="8" x2="16" y2="16"/><line x1="20" y1="12" x2="20" y2="12"/></svg></span>
@@ -106,15 +106,23 @@
     <section id="record" class="tool-section">
       <p class="eyebrow">Screen recorder</p>
       <div class="panel reveal">
-        <h2>Record your screen &amp; audio</h2>
-        <p class="hint" id="recHintText">Select your audio sources below before starting. To record meetings (like Teams, Zoom, or Meet), check both boxes: System Audio captures what other people say, and Microphone captures your voice using your default or external USB mic.</p>
+        <h2>Record screen, webcam &amp; audio</h2>
+        <p class="hint" id="recHintText">Select your inputs below before starting. You can include a live webcam bubble overlay (PiP), system meeting audio, and your external microphone!</p>
         
         <div class="audio-options-row" id="recAudioOptions">
+          <label class="audio-toggle-card">
+            <input type="checkbox" id="recWebcamPip">
+            <div class="audio-toggle-text">
+              <span class="audio-toggle-title">Webcam Overlay (PiP)</span>
+              <span class="audio-toggle-desc">Embeds a circular camera bubble in the bottom corner of your screen recording. Perfect for tutorials and presentations!</span>
+            </div>
+          </label>
+
           <label class="audio-toggle-card">
             <input type="checkbox" id="recSystemAudio">
             <div class="audio-toggle-text">
               <span class="audio-toggle-title">System / Tab Audio</span>
-              <span class="audio-toggle-desc">Captures sound from the recorded app or tab (what other people say in meetings). Note: Make sure to check "Share tab audio" or "Share system audio" in your browser's screen picker popup!</span>
+              <span class="audio-toggle-desc">Captures sound from the recorded app or tab (what other people say in meetings). Make sure to check "Share audio" in the browser popup!</span>
             </div>
           </label>
 
@@ -143,6 +151,11 @@
           <p><strong>📱 Mobile Device Detected:</strong> Live screen recording is restricted by mobile operating systems (iOS and Android). Please use your phone's built-in screen recorder from your Control Center or Quick Settings, then upload the video in the tool below to trim and edit it!</p>
           <a href="#editor" class="btn primary">Go to Video Editor &darr;</a>
         </div>
+
+        <div id="securityRecFallback" class="mobile-fallback" style="border-color: #d97706; background: rgba(217, 119, 6, 0.05);" hidden>
+          <p><strong>🔒 Browser Security Notice:</strong> You are on a laptop/desktop, but your web browser has blocked the screen recording API because you opened this file directly from your folder (via <code>file://</code> protocol). To record your screen, please deploy this app to Vercel (which provides a secure HTTPS domain) or run it via a local web server!</p>
+          <a href="#editor" class="btn primary" style="background: #d97706; border-color: #d97706;">Use Video Editor Instead &darr;</a>
+        </div>
       </div>
 
       <div class="panel reveal" id="recResultPanel" hidden>
@@ -165,16 +178,23 @@
       <p class="eyebrow">Trim, mark and blur</p>
 
       <div class="panel reveal">
-        <h2>Load a video</h2>
-        <p class="hint">Use a fresh recording, or upload any video file from your device. You can cut clips, blur sensitive info, draw boxes, or check "Remove Audio" below to export a completely silent video.</p>
-        <input type="file" id="videoFileInput" accept="video/*">
+        <h2>Load a video or saved project</h2>
+        <p class="hint">Use a fresh recording, upload any video file from your device, or reload a saved `.json` project file to restore your previous timeline and blur boxes.</p>
+        <div class="row">
+          <input type="file" id="videoFileInput" accept="video/*" title="Load Video">
+          <button class="btn" id="loadProjectBtn">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Resume Project (.json)
+          </button>
+          <input type="file" id="projectFileInput" accept=".json" hidden>
+        </div>
       </div>
 
       <p id="editorEmpty" class="empty">No video loaded yet.</p>
 
       <div id="editorWork" hidden>
         <div class="panel reveal">
-          <h2>Timeline</h2>
+          <h2>Timeline &amp; Shortcuts <span class="shortcut-badge">Space: Play/Pause | &larr;/&rarr;: Step Frame</span></h2>
           <div class="slider-row">
             <label>Start</label>
             <input type="range" id="trimStart" min="0" max="100" value="0" step="0.01">
@@ -193,7 +213,7 @@
         </div>
 
         <div class="panel reveal">
-          <h2>Mark and blur areas</h2>
+          <h2>Mark and blur areas <span class="shortcut-badge">M: Mark | B: Blur | Z: Undo</span></h2>
           <p class="hint">Pick a tool, then drag on the preview to draw a box. You can set individual Start and End times for each box below so it appears only during specific timestamps.</p>
           <div class="row">
             <button class="btn" id="markToolBtn">
@@ -208,13 +228,45 @@
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               Stop drawing
             </button>
+            <button class="btn" id="undoRegionBtn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>
+              Undo last box
+            </button>
           </div>
           <div class="region-list" id="regionList"></div>
         </div>
 
         <div class="panel reveal">
-          <h2>Preview and export</h2>
+          <h2>Pro Export Settings</h2>
           
+          <div class="pro-controls-grid">
+            <div class="pro-control-box">
+              <span class="pro-control-label">Playback Speed</span>
+              <select id="exportSpeedSelect" class="pro-select">
+                <option value="0.5">0.5x (Slow Motion)</option>
+                <option value="1" selected>1.0x (Normal Speed)</option>
+                <option value="1.5">1.5x (Fast Speed)</option>
+                <option value="2">2.0x (Time-Lapse)</option>
+                <option value="4">4.0x (Super Time-Lapse)</option>
+              </select>
+            </div>
+
+            <div class="pro-control-box">
+              <span class="pro-control-label">Custom Watermark / Logo</span>
+              <input type="file" id="watermarkInput" accept="image/*" class="pro-select" style="padding: 4px;">
+            </div>
+
+            <div class="pro-control-box">
+              <span class="pro-control-label">Watermark Position</span>
+              <select id="watermarkPosSelect" class="pro-select">
+                <option value="top-left">Top Left</option>
+                <option value="top-right">Top Right</option>
+                <option value="bottom-left">Bottom Left</option>
+                <option value="bottom-right" selected>Bottom Right</option>
+              </select>
+            </div>
+          </div>
+
           <div class="audio-options-row" style="margin: 8px 0 18px; width: 100%;">
             <label class="audio-toggle-card">
               <input type="checkbox" id="exportRemoveAudio">
@@ -236,6 +288,10 @@
               <button class="btn primary" id="exportBtn">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 Export final video
+              </button>
+              <button class="btn" id="saveProjectBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                Save Project File (.json)
               </button>
             </div>
             <div class="progress-wrap" id="exportProgressWrap"><div class="progress-bar" id="exportProgressBar"></div></div>
