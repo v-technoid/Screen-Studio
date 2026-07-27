@@ -14,12 +14,10 @@
     var shotHintText = document.getElementById('shotHintText');
     var mobileShotFallback = document.getElementById('mobileShotFallback');
 
-    // 1. Force hide all warning banners by default
     if(mobileRecFallback) mobileRecFallback.hidden = true;
     if(securityRecFallback) securityRecFallback.hidden = true;
     if(mobileShotFallback) mobileShotFallback.hidden = true;
 
-    // 2. If screen recording works (like on your laptop), stop here! Show ZERO banners.
     if(canRecordScreen){
       if(recAudioOptions) recAudioOptions.hidden = false;
       if(recControlsRow) recControlsRow.hidden = false;
@@ -29,7 +27,6 @@
       return;
     }
 
-    // 3. Only if screen recording is blocked, hide live controls and show the correct banner:
     if(recAudioOptions) recAudioOptions.hidden = true;
     if(recControlsRow) recControlsRow.hidden = true;
     if(recHintText) recHintText.hidden = true;
@@ -322,6 +319,7 @@
   var ctx = editCanvas ? editCanvas.getContext('2d') : null;
   var editorEmpty = document.getElementById('editorEmpty');
   var editorWork = document.getElementById('editorWork');
+  var removeVideoBtn = document.getElementById('removeVideoBtn');
 
   var trimStart = document.getElementById('trimStart');
   var trimEnd = document.getElementById('trimEnd');
@@ -370,10 +368,31 @@
       updateLabels();
       editorEmpty.hidden = true;
       editorWork.hidden = false;
+      if(removeVideoBtn) removeVideoBtn.hidden = false;
       sourceVideo.currentTime = 0;
       sourceVideo.addEventListener('seeked', drawCurrentFrame, { once: false });
       drawCurrentFrame();
     };
+  }
+
+  if(removeVideoBtn){
+    removeVideoBtn.addEventListener('click', function(){
+      sourceVideo.pause();
+      sourceVideo.src = '';
+      sourceVideo.removeAttribute('src');
+      sourceVideo.load();
+      regions = [];
+      renderRegionList();
+      if(videoFileInput) videoFileInput.value = '';
+      if(projectFileInput) projectFileInput.value = '';
+      editorWork.hidden = true;
+      editorEmpty.hidden = false;
+      removeVideoBtn.hidden = true;
+      var exportResult = document.getElementById('exportResult');
+      if(exportResult) exportResult.innerHTML = '';
+      var exportProgressWrap = document.getElementById('exportProgressWrap');
+      if(exportProgressWrap) exportProgressWrap.classList.remove('show');
+    });
   }
 
   function updateLabels(){
@@ -765,6 +784,7 @@
   var audioStartLabel = document.getElementById('audioStartLabel');
   var audioEndLabel = document.getElementById('audioEndLabel');
   var audioResult = document.getElementById('audioResult');
+  var removeAudioBtn = document.getElementById('removeAudioBtn');
   var audioCtx = null, audioBuffer = null, playingSource = null;
 
   if(audioFileInput){
@@ -780,7 +800,20 @@
       updateAudioLabels();
       audioEmpty.hidden = true;
       audioWork.hidden = false;
+      if(removeAudioBtn) removeAudioBtn.hidden = false;
       audioResult.innerHTML = '';
+    });
+  }
+
+  if(removeAudioBtn){
+    removeAudioBtn.addEventListener('click', function(){
+      if(playingSource){ try{ playingSource.stop(); }catch(e){} }
+      audioBuffer = null;
+      if(audioFileInput) audioFileInput.value = '';
+      audioWork.hidden = true;
+      audioEmpty.hidden = false;
+      removeAudioBtn.hidden = true;
+      if(audioResult) audioResult.innerHTML = '';
     });
   }
 
@@ -885,6 +918,7 @@
   var shotEmpty = document.getElementById('shotEmpty');
   var shotWork = document.getElementById('shotWork');
   var shotCanvas = document.getElementById('shotCanvas');
+  var removeShotBtn = document.getElementById('removeShotBtn');
   var sctx = shotCanvas ? shotCanvas.getContext('2d') : null;
 
   var shotImage = null;
@@ -1027,7 +1061,25 @@
     shotCanvas.height = img.height;
     shotEmpty.hidden = true;
     shotWork.hidden = false;
+    if(removeShotBtn) removeShotBtn.hidden = false;
     redrawShot();
+  }
+
+  if(removeShotBtn){
+    removeShotBtn.addEventListener('click', function(){
+      shotImage = null;
+      shotAnnotations = [];
+      if(shotFileInput) shotFileInput.value = '';
+      if(shotFileInputMobile) shotFileInputMobile.value = '';
+      shotWork.hidden = true;
+      shotEmpty.hidden = false;
+      removeShotBtn.hidden = true;
+      var ocrResultText = document.getElementById('ocrResultText');
+      var ocrStatus = document.getElementById('ocrStatus');
+      if(ocrResultText) ocrResultText.value = '';
+      if(ocrStatus) ocrStatus.textContent = '';
+      if(areaPicker) areaPicker.hidden = true;
+    });
   }
 
   function redrawShot(){
@@ -1169,6 +1221,96 @@
     });
   }
 
+  // ---------- Client-Side OCR (Text Extractor) ----------
+  var shotExtractTextBtn = document.getElementById('shotExtractTextBtn');
+  var ocrStatus = document.getElementById('ocrStatus');
+  var ocrResultText = document.getElementById('ocrResultText');
+  var ocrCopyBtn = document.getElementById('ocrCopyBtn');
+
+  if(shotExtractTextBtn){
+    shotExtractTextBtn.addEventListener('click', async function(){
+      if(!shotImage){
+        alert('Please capture or upload a screenshot first.');
+        return;
+      }
+      if(typeof Tesseract === 'undefined'){
+        alert('OCR library (Tesseract.js) failed to load. Please check your internet connection for the initial load.');
+        return;
+      }
+
+      shotExtractTextBtn.disabled = true;
+      if(ocrCopyBtn) ocrCopyBtn.disabled = true;
+      if(ocrResultText) ocrResultText.value = '';
+
+      var rectAnn = null;
+      for(var i = shotAnnotations.length - 1; i >= 0; i--){
+        if(shotAnnotations[i].type === 'rect'){
+          rectAnn = shotAnnotations[i];
+          break;
+        }
+      }
+
+      var scanCanvas = document.createElement('canvas');
+      var sCtx = scanCanvas.getContext('2d');
+
+      if(rectAnn && Math.abs(rectAnn.x2 - rectAnn.x1) > 10 && Math.abs(rectAnn.y2 - rectAnn.y1) > 10){
+        var rx = Math.max(0, Math.min(rectAnn.x1, rectAnn.x2));
+        var ry = Math.max(0, Math.min(rectAnn.y1, rectAnn.y2));
+        var rw = Math.min(shotImage.width - rx, Math.abs(rectAnn.x2 - rectAnn.x1));
+        var rh = Math.min(shotImage.height - ry, Math.abs(rectAnn.y2 - rectAnn.y1));
+
+        scanCanvas.width = rw;
+        scanCanvas.height = rh;
+        sCtx.drawImage(shotImage, rx, ry, rw, rh, 0, 0, rw, rh);
+        if(ocrStatus) ocrStatus.innerHTML = '<span class="rec-dot pulsing"></span>Scanning highlighted box region...';
+      } else {
+        scanCanvas.width = shotImage.width;
+        scanCanvas.height = shotImage.height;
+        sCtx.drawImage(shotImage, 0, 0);
+        if(ocrStatus) ocrStatus.innerHTML = '<span class="rec-dot pulsing"></span>Scanning entire screenshot...';
+      }
+
+      try{
+        var worker = await Tesseract.createWorker("eng");
+        if(ocrStatus) ocrStatus.innerHTML = '<span class="rec-dot pulsing"></span>Extracting text...';
+        var ret = await worker.recognize(scanCanvas);
+        await worker.terminate();
+
+        var extractedText = ret && ret.data && ret.data.text ? ret.data.text.trim() : '';
+        if(!extractedText){
+          if(ocrResultText) ocrResultText.value = 'No text could be recognized in this image or selected region.';
+        } else {
+          if(ocrResultText) ocrResultText.value = extractedText;
+          if(ocrCopyBtn) ocrCopyBtn.disabled = false;
+        }
+        if(ocrStatus) ocrStatus.textContent = '✓ Scan complete!';
+      }catch(err){
+        if(ocrStatus) ocrStatus.textContent = 'OCR Error: ' + err.message;
+        if(ocrResultText) ocrResultText.value = 'Failed to extract text. Please try again.';
+      } finally {
+        shotExtractTextBtn.disabled = false;
+      }
+    });
+  }
+
+  if(ocrCopyBtn && ocrResultText){
+    ocrCopyBtn.addEventListener('click', function(){
+      if(!ocrResultText.value) return;
+      navigator.clipboard.writeText(ocrResultText.value).then(function(){
+        var origText = ocrCopyBtn.innerHTML;
+        ocrCopyBtn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied to Clipboard!';
+        ocrCopyBtn.classList.add('primary');
+        setTimeout(function(){
+          ocrCopyBtn.innerHTML = origText;
+          ocrCopyBtn.classList.remove('primary');
+        }, 2000);
+      }).catch(function(){
+        ocrResultText.select();
+        document.execCommand('copy');
+      });
+    });
+  }
+
   var shotDownloadOriginalBtn = document.getElementById('shotDownloadOriginalBtn');
   var shotDownloadEditedBtn = document.getElementById('shotDownloadEditedBtn');
 
@@ -1196,6 +1338,121 @@
       a.click();
       document.body.removeChild(a);
     }, 'image/png');
+  }
+
+  // ================= COMBINE MEDIA TAB =================
+  var combineVideoInput = document.getElementById('combineVideoInput');
+  var combineVideoList = document.getElementById('combineVideoList');
+  var combineVideoClearBtn = document.getElementById('combineVideoClearBtn');
+  var combineVideos = [];
+
+  if(combineVideoInput){
+    combineVideoInput.addEventListener('change', function(){
+      Array.from(combineVideoInput.files).forEach(function(f){ combineVideos.push(f); });
+      renderCombineVideos();
+      combineVideoInput.value = '';
+    });
+  }
+
+  if(combineVideoClearBtn){
+    combineVideoClearBtn.addEventListener('click', function(){
+      combineVideos = [];
+      renderCombineVideos();
+    });
+  }
+
+  function renderCombineVideos(){
+    if(!combineVideoList) return;
+    combineVideoList.innerHTML = '';
+    if(combineVideoClearBtn) combineVideoClearBtn.hidden = (combineVideos.length === 0);
+    
+    combineVideos.forEach(function(f, i){
+      var div = document.createElement('div');
+      div.className = 'combine-item';
+      div.innerHTML = 
+        '<span class="combine-index">' + (i + 1) + '</span>' +
+        '<span class="label">' + f.name + '</span>' +
+        '<button title="Move Up" data-i="' + i + '" class="up-btn">&uarr;</button>' +
+        '<button title="Move Down" data-i="' + i + '" class="down-btn">&darr;</button>' +
+        '<button title="Remove" data-i="' + i + '" class="remove-btn">&times;</button>';
+      combineVideoList.appendChild(div);
+    });
+
+    combineVideoList.querySelectorAll('.up-btn').forEach(function(b){
+      b.addEventListener('click', function(){
+        var i = parseInt(b.dataset.i);
+        if(i > 0){ var tmp = combineVideos[i-1]; combineVideos[i-1] = combineVideos[i]; combineVideos[i] = tmp; renderCombineVideos(); }
+      });
+    });
+    combineVideoList.querySelectorAll('.down-btn').forEach(function(b){
+      b.addEventListener('click', function(){
+        var i = parseInt(b.dataset.i);
+        if(i < combineVideos.length - 1){ var tmp = combineVideos[i+1]; combineVideos[i+1] = combineVideos[i]; combineVideos[i] = tmp; renderCombineVideos(); }
+      });
+    });
+    combineVideoList.querySelectorAll('.remove-btn').forEach(function(b){
+      b.addEventListener('click', function(){
+        combineVideos.splice(parseInt(b.dataset.i), 1);
+        renderCombineVideos();
+      });
+    });
+  }
+
+  var combineImageInput = document.getElementById('combineImageInput');
+  var combineImageList = document.getElementById('combineImageList');
+  var combineImageClearBtn = document.getElementById('combineImageClearBtn');
+  var combineImages = [];
+
+  if(combineImageInput){
+    combineImageInput.addEventListener('change', function(){
+      Array.from(combineImageInput.files).forEach(function(f){ combineImages.push(f); });
+      renderCombineImages();
+      combineImageInput.value = '';
+    });
+  }
+
+  if(combineImageClearBtn){
+    combineImageClearBtn.addEventListener('click', function(){
+      combineImages = [];
+      renderCombineImages();
+    });
+  }
+
+  function renderCombineImages(){
+    if(!combineImageList) return;
+    combineImageList.innerHTML = '';
+    if(combineImageClearBtn) combineImageClearBtn.hidden = (combineImages.length === 0);
+
+    combineImages.forEach(function(f, i){
+      var div = document.createElement('div');
+      div.className = 'combine-item';
+      div.innerHTML = 
+        '<span class="combine-index">' + (i + 1) + '</span>' +
+        '<span class="label">' + f.name + '</span>' +
+        '<button title="Move Up" data-i="' + i + '" class="up-btn">&uarr;</button>' +
+        '<button title="Move Down" data-i="' + i + '" class="down-btn">&darr;</button>' +
+        '<button title="Remove" data-i="' + i + '" class="remove-btn">&times;</button>';
+      combineImageList.appendChild(div);
+    });
+
+    combineImageList.querySelectorAll('.up-btn').forEach(function(b){
+      b.addEventListener('click', function(){
+        var i = parseInt(b.dataset.i);
+        if(i > 0){ var tmp = combineImages[i-1]; combineImages[i-1] = combineImages[i]; combineImages[i] = tmp; renderCombineImages(); }
+      });
+    });
+    combineImageList.querySelectorAll('.down-btn').forEach(function(b){
+      b.addEventListener('click', function(){
+        var i = parseInt(b.dataset.i);
+        if(i < combineImages.length - 1){ var tmp = combineImages[i+1]; combineImages[i+1] = combineImages[i]; combineImages[i] = tmp; renderCombineImages(); }
+      });
+    });
+    combineImageList.querySelectorAll('.remove-btn').forEach(function(b){
+      b.addEventListener('click', function(){
+        combineImages.splice(parseInt(b.dataset.i), 1);
+        renderCombineImages();
+      });
+    });
   }
 
 })();
