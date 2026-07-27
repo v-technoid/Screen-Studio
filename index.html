@@ -6,6 +6,8 @@
 <title>Screen Studio — offline screen recorder and editor</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%232563eb'/%3E%3Ccircle cx='16' cy='16' r='6' fill='white'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="styles.css">
+<!-- Tesseract.js Offline OCR Library -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
 </head>
 <body>
@@ -92,8 +94,8 @@
         </a>
         <a class="tool-card reveal" href="#screenshot">
           <span class="tool-icon shot"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>
-          <span class="tool-name">Screenshot &amp; Annotate</span>
-          <span class="tool-desc">Full screen or a selected area, then draw, blur, or crop it.</span>
+          <span class="tool-name">Screenshot &amp; Extract Text</span>
+          <span class="tool-desc">Full screen capture, annotations, and offline OCR text extraction.</span>
         </a>
         <a class="tool-card reveal" href="#combine">
           <span class="tool-icon combine"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/><path d="M8 13v3a2 2 0 0 0 2 2h3"/><path d="M16 11V8a2 2 0 0 0-2-2h-3"/></svg></span>
@@ -188,6 +190,12 @@
             Resume Project (.json)
           </button>
           <input type="file" id="projectFileInput" accept=".json" hidden>
+          
+          <!-- Dedicated Delete/Reset Video Button -->
+          <button class="btn danger" id="removeVideoBtn" hidden>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Remove Video
+          </button>
         </div>
       </div>
 
@@ -308,7 +316,15 @@
       <div class="panel reveal">
         <h2>Trim an audio file</h2>
         <p class="hint">Loads an audio file, lets you pick a start and end point, exports that section as a WAV file.</p>
-        <input type="file" id="audioFileInput" accept="audio/*">
+        <div class="row">
+          <input type="file" id="audioFileInput" accept="audio/*">
+          
+          <!-- Dedicated Delete/Reset Audio Button -->
+          <button class="btn danger" id="removeAudioBtn" hidden>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Remove Audio
+          </button>
+        </div>
       </div>
 
       <p id="audioEmpty" class="empty">No audio loaded yet.</p>
@@ -358,6 +374,12 @@
             Capture, then select area
           </button>
           <input type="file" id="shotFileInput" accept="image/*">
+          
+          <!-- Dedicated Delete/Reset Screenshot Button -->
+          <button class="btn danger" id="removeShotBtn" hidden>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Remove Image
+          </button>
         </div>
 
         <div id="mobileShotFallback" class="mobile-fallback" hidden>
@@ -433,7 +455,26 @@
             </button>
             <button class="btn danger" id="shotClearBtn">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-              Clear all
+              Clear annotations
+            </button>
+          </div>
+        </div>
+
+        <div class="panel reveal">
+          <h2>Extract Text from Image (Offline OCR)</h2>
+          <p class="hint">Extract text, code snippets, or error messages directly from your screenshot. Tip: To scan only a specific section, draw a <strong>Box</strong> around it above using the Draw tools, then click extract!</p>
+          <div class="row">
+            <button class="btn primary" id="shotExtractTextBtn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              Scan &amp; Extract Text
+            </button>
+            <span id="ocrStatus" class="status"></span>
+          </div>
+          <textarea id="ocrResultText" class="pro-select" style="width:100%; height:110px; font-family:monospace; margin-top:14px; resize:vertical;" placeholder="Extracted text will appear here after scanning..." readonly></textarea>
+          <div class="row" style="margin-top:10px;">
+            <button class="btn" id="ocrCopyBtn" disabled>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy to Clipboard
             </button>
           </div>
         </div>
@@ -464,7 +505,14 @@
       <div class="panel reveal">
         <h2>Combine multiple videos into one</h2>
         <p class="hint">Add two or more video files below, reorder them with the arrows, then merge into a single video played back to back in that exact order.</p>
-        <input type="file" id="combineVideoInput" accept="video/*" multiple>
+        <div class="row">
+          <input type="file" id="combineVideoInput" accept="video/*" multiple>
+          <!-- Dedicated Clear All Videos Button -->
+          <button class="btn danger" id="combineVideoClearBtn" hidden>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Clear All Videos
+          </button>
+        </div>
         <div class="combine-list" id="combineVideoList"></div>
         <div class="row" style="margin-top:14px;">
           <button class="btn primary" id="combineVideoExportBtn">
@@ -479,7 +527,14 @@
       <div class="panel reveal">
         <h2>Combine images</h2>
         <p class="hint">Add two or more images, reorder them, then either merge them side by side into one image, or turn them into a slideshow video.</p>
-        <input type="file" id="combineImageInput" accept="image/*" multiple>
+        <div class="row">
+          <input type="file" id="combineImageInput" accept="image/*" multiple>
+          <!-- Dedicated Clear All Images Button -->
+          <button class="btn danger" id="combineImageClearBtn" hidden>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Clear All Images
+          </button>
+        </div>
         <div class="combine-list" id="combineImageList"></div>
         <div class="slider-row" style="margin-top:14px;">
           <label>Per slide</label>
