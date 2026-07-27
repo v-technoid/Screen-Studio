@@ -1,5 +1,35 @@
 (function(){
 
+  // ---------- mobile & capabilities detection ----------
+  function handleMobileDeviceCapabilities(){
+    var isMobileOS = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || ('ontouchstart' in window && window.innerWidth < 800);
+    var lacksDisplayMedia = !(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia);
+    
+    if(isMobileOS || lacksDisplayMedia){
+      // Hide live recording controls & show fallback banner
+      var recAudioOptions = document.getElementById('recAudioOptions');
+      var recControlsRow = document.getElementById('recControlsRow');
+      var recHintText = document.getElementById('recHintText');
+      var mobileRecFallback = document.getElementById('mobileRecFallback');
+
+      if(recAudioOptions) recAudioOptions.hidden = true;
+      if(recControlsRow) recControlsRow.hidden = true;
+      if(recHintText) recHintText.hidden = true;
+      if(mobileRecFallback) mobileRecFallback.hidden = false;
+
+      // Hide live screenshot capture buttons & show fallback banner
+      var shotButtonsRow = document.getElementById('shotButtonsRow');
+      var shotHintText = document.getElementById('shotHintText');
+      var mobileShotFallback = document.getElementById('mobileShotFallback');
+
+      if(shotButtonsRow) shotButtonsRow.hidden = true;
+      if(shotHintText) shotHintText.hidden = true;
+      if(mobileShotFallback) mobileShotFallback.hidden = false;
+    }
+  }
+  
+  handleMobileDeviceCapabilities();
+
   // ---------- mobile menu ----------
   var hamburgerBtn = document.getElementById('hamburgerBtn');
   var mobileNav = document.getElementById('mobileNav');
@@ -471,10 +501,8 @@
       var end = parseFloat(trimEnd.value);
       var duration = end - start;
 
-      // 1. Get the video stream from Canvas
       var stream = editCanvas.captureStream(30);
       
-      // 2. Check if user wants to remove audio or preserve it
       var removeAudioEl = document.getElementById('exportRemoveAudio');
       var shouldRemoveAudio = removeAudioEl && removeAudioEl.checked;
 
@@ -658,6 +686,7 @@
   var captureShotBtn = document.getElementById('captureShotBtn');
   var captureAreaBtn = document.getElementById('captureAreaBtn');
   var shotFileInput = document.getElementById('shotFileInput');
+  var shotFileInputMobile = document.getElementById('shotFileInputMobile');
   var shotEmpty = document.getElementById('shotEmpty');
   var shotWork = document.getElementById('shotWork');
   var shotCanvas = document.getElementById('shotCanvas');
@@ -783,14 +812,18 @@
     });
   }
 
+  function handleImageUpload(f){
+    if(!f) return;
+    var img = new Image();
+    img.onload = function(){ loadShotImage(img); };
+    img.src = URL.createObjectURL(f);
+  }
+
   if(shotFileInput){
-    shotFileInput.addEventListener('change', function(){
-      var f = shotFileInput.files[0];
-      if(!f) return;
-      var img = new Image();
-      img.onload = function(){ loadShotImage(img); };
-      img.src = URL.createObjectURL(f);
-    });
+    shotFileInput.addEventListener('change', function(){ handleImageUpload(shotFileInput.files[0]); });
+  }
+  if(shotFileInputMobile){
+    shotFileInputMobile.addEventListener('change', function(){ handleImageUpload(shotFileInputMobile.files[0]); });
   }
 
   function loadShotImage(img){
