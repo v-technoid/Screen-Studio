@@ -107,9 +107,9 @@
       <p class="eyebrow">Screen recorder</p>
       <div class="panel reveal">
         <h2>Record your screen &amp; audio</h2>
-        <p class="hint">Select your audio sources below before starting. To record meetings (like Teams, Zoom, or Meet), check both boxes: System Audio captures what other people say, and Microphone captures your voice using your default or external USB mic.</p>
+        <p class="hint" id="recHintText">Select your audio sources below before starting. To record meetings (like Teams, Zoom, or Meet), check both boxes: System Audio captures what other people say, and Microphone captures your voice using your default or external USB mic.</p>
         
-        <div class="audio-options-row">
+        <div class="audio-options-row" id="recAudioOptions">
           <label class="audio-toggle-card">
             <input type="checkbox" id="recSystemAudio">
             <div class="audio-toggle-text">
@@ -127,7 +127,7 @@
           </label>
         </div>
 
-        <div class="row">
+        <div class="row" id="recControlsRow">
           <button class="btn primary" id="startRecBtn">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
             Start recording
@@ -137,6 +137,11 @@
             Stop recording
           </button>
           <span id="recStatus" class="status"></span>
+        </div>
+
+        <div id="mobileRecFallback" class="mobile-fallback" hidden>
+          <p><strong>📱 Mobile Device Detected:</strong> Live screen recording is restricted by mobile operating systems (iOS and Android). Please use your phone's built-in screen recorder from your Control Center or Quick Settings, then upload the video in the tool below to trim and edit it!</p>
+          <a href="#editor" class="btn primary">Go to Video Editor &darr;</a>
         </div>
       </div>
 
@@ -284,8 +289,9 @@
 
       <div class="panel reveal">
         <h2>Capture or upload an image</h2>
-        <p class="hint">Capture the whole screen, or capture then drag out just the area you want to keep. Capturing uses the same screen picker as the recorder, that prompt is a browser safety requirement, not something this tool adds.</p>
-        <div class="row">
+        <p class="hint" id="shotHintText">Capture the whole screen, or capture then drag out just the area you want to keep. You can also upload any existing image from your device.</p>
+        
+        <div class="row" id="shotButtonsRow">
           <button class="btn primary" id="captureShotBtn">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             Capture full screen
@@ -295,6 +301,13 @@
             Capture, then select area
           </button>
           <input type="file" id="shotFileInput" accept="image/*">
+        </div>
+
+        <div id="mobileShotFallback" class="mobile-fallback" hidden>
+          <p><strong>📱 Mobile Device Detected:</strong> Live screen capturing is not available on mobile browsers. Please take a screenshot using your phone's physical hardware buttons, then use the file chooser below to select and annotate it!</p>
+          <div style="margin-top: 4px;">
+            <input type="file" id="shotFileInputMobile" accept="image/*">
+          </div>
         </div>
       </div>
 
