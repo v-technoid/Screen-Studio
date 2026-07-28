@@ -159,6 +159,15 @@
   var recSystemAudioEl = document.getElementById('recSystemAudio');
   var recMicAudioEl = document.getElementById('recMicAudio');
   var recWebcamPipEl = document.getElementById('recWebcamPip');
+  var recAutoCaptionsEl = document.getElementById('recAutoCaptions');
+
+  var liveTranscribeBox = document.getElementById('liveTranscribeBox');
+  var liveTranscribeText = document.getElementById('liveTranscribeText');
+
+  var liveSpeechRecognition = null;
+  var recordedSpeechCaptions = [];
+  var recStartTime = 0;
+  var phraseStartTime = 0;
 
   if(startRecBtn){
     startRecBtn.addEventListener('click', async function(){
@@ -166,6 +175,7 @@
         var wantsSystemAudio = recSystemAudioEl && recSystemAudioEl.checked;
         var wantsMicAudio = recMicAudioEl && recMicAudioEl.checked;
         var wantsWebcamPip = recWebcamPipEl && recWebcamPipEl.checked;
+        var wantsAutoCaptions = recAutoCaptionsEl && recAutoCaptionsEl.checked;
 
         var displayStream = await navigator.mediaDevices.getDisplayMedia({
           video: true,
@@ -175,13 +185,13 @@
         var micStream = null;
         var webcamStream = null;
 
-        if(wantsMicAudio || wantsWebcamPip){
+        if(wantsMicAudio || wantsWebcamPip || wantsAutoCaptions){
           try{
             var userStream = await navigator.mediaDevices.getUserMedia({
-              audio: wantsMicAudio ? { echoCancellation: true, noiseSuppression: true } : false,
+              audio: (wantsMicAudio || wantsAutoCaptions) ? { echoCancellation: true, noiseSuppression: true } : false,
               video: wantsWebcamPip ? { width: 400, height: 400 } : false
             });
-            if(wantsMicAudio && userStream.getAudioTracks().length > 0) micStream = new MediaStream([userStream.getAudioTracks()[0]]);
+            if((wantsMicAudio || wantsAutoCaptions) && userStream.getAudioTracks().length > 0) micStream = new MediaStream([userStream.getAudioTracks()[0]]);
             if(wantsWebcamPip && userStream.getVideoTracks().length > 0) webcamStream = new MediaStream([userStream.getVideoTracks()[0]]);
           }catch(userErr){
             alert('Could not access hardware: ' + userErr.message + '\nContinuing without mic/webcam overlay.');
@@ -242,7 +252,7 @@
         var combinedStream = new MediaStream([videoTrackToRecord]);
         var audioTracksToMix = [];
         if(displayStream.getAudioTracks().length > 0) audioTracksToMix.push(displayStream.getAudioTracks()[0]);
-        if(micStream && micStream.getAudioTracks().length > 0) audioTracksToMix.push(micStream.getAudioTracks()[0]);
+        if(wantsMicAudio && micStream && micStream.getAudioTracks().length > 0) audioTracksToMix.push(micStream.getAudioTracks()[0]);
 
         var audioCtx = null;
         if(audioTracksToMix.length === 1){
@@ -260,6 +270,69 @@
         }
 
         recordedChunks = [];
+        recordedSpeechCaptions = [];
+        recStartTime = performance.now();
+        phraseStartTime = 0;
+
+        if(wantsAutoCaptions){
+          var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+          if(SpeechRec){
+            liveSpeechRecognition = new SpeechRec();
+            liveSpeechRecognition.continuous = true;
+            liveSpeechRecognition.interimResults = true;
+            liveSpeechRecognition.lang = 'en-US';
+            
+            if(liveTranscribeBox) liveTranscribeBox.hidden = false;
+            if(liveTranscribeText) liveTranscribeText.textContent = 'Listening...';
+
+            liveSpeechRecognition.onresult = function(e){
+              var interimTranscript = '';
+              var finalTranscript = '';
+
+              for(var i = e.resultIndex; i < e.results.length; ++i){
+                if(e.results[i].isFinal){
+                  finalTranscript += e.results[i][0].transcript.trim();
+                } else {
+                  interimTranscript += e.results[i][0].transcript;
+                }
+              }
+
+              if(phraseStartTime === 0 && (interimTranscript || finalTranscript)){
+                phraseStartTime = (performance.now() - recStartTime) / 1000;
+              }
+
+              if(liveTranscribeText){
+                liveTranscribeText.textContent = finalTranscript || interimTranscript || 'Listening...';
+              }
+
+              if(finalTranscript){
+                var nowSec = (performance.now() - recStartTime) / 1000;
+                var duration = Math.max(1, nowSec - phraseStartTime);
+                var words = finalTranscript.split(/\s+/);
+                
+                var chunkSize = 4;
+                var totalChunks = Math.ceil(words.length / chunkSize);
+                var chunkDur = duration / totalChunks;
+
+                for(var c = 0; c < totalChunks; c++){
+                  var chunkWords = words.slice(c * chunkSize, (c + 1) * chunkSize).join(' ');
+                  var chunkStart = phraseStartTime + (c * chunkDur);
+                  var chunkEnd = chunkStart + chunkDur;
+                  recordedSpeechCaptions.push({
+                    startTime: Math.max(0, chunkStart),
+                    endTime: chunkEnd,
+                    text: chunkWords
+                  });
+                }
+                phraseStartTime = 0;
+              }
+            };
+            try{ liveSpeechRecognition.start(); }catch(e){}
+          } else {
+            alert('Live speech recognition is not supported in this browser. Trying recording without auto-captions.');
+          }
+        }
+
         var mimeType = 'video/webm;codecs=vp9';
         if(!MediaRecorder.isTypeSupported(mimeType)) mimeType = 'video/webm';
         mediaRecorder = new MediaRecorder(combinedStream, { mimeType: mimeType });
@@ -268,6 +341,9 @@
         
         mediaRecorder.onstop = function(){
           if(pipAnimId) cancelAnimationFrame(pipAnimId);
+          if(liveSpeechRecognition){ try{ liveSpeechRecognition.stop(); }catch(e){} liveSpeechRecognition = null; }
+          if(liveTranscribeBox) liveTranscribeBox.hidden = true;
+          
           var blob = new Blob(recordedChunks, { type: 'video/webm' });
           recordedBlobUrl = URL.createObjectURL(blob);
           recDownloadLink.href = recordedBlobUrl;
@@ -306,7 +382,7 @@
   if(sendToEditorBtn){
     sendToEditorBtn.addEventListener('click', function(){
       if(recordedBlobUrl){
-        loadVideoIntoEditor(recordedBlobUrl);
+        loadVideoIntoEditor(recordedBlobUrl, recordedSpeechCaptions);
         document.getElementById('editor').scrollIntoView({ behavior: 'smooth' });
       }
     });
@@ -333,6 +409,13 @@
   var activeTool = null;
   var drawing = false, drawStart = null, liveRect = null;
 
+  var captions = []; // {startTime, endTime, text}
+  var captionList = document.getElementById('captionList');
+  var subtitleFileInput = document.getElementById('subtitleFileInput');
+  var addCaptionBtn = document.getElementById('addCaptionBtn');
+  var exportSrtBtn = document.getElementById('exportSrtBtn');
+  var clearCaptionsBtn = document.getElementById('clearCaptionsBtn');
+
   var watermarkImg = null;
   var watermarkInput = document.getElementById('watermarkInput');
   if(watermarkInput){
@@ -348,13 +431,15 @@
   if(videoFileInput){
     videoFileInput.addEventListener('change', function(){
       var f = videoFileInput.files[0];
-      if(f) loadVideoIntoEditor(URL.createObjectURL(f));
+      if(f) loadVideoIntoEditor(URL.createObjectURL(f), []);
     });
   }
 
-  function loadVideoIntoEditor(url){
+  function loadVideoIntoEditor(url, initialCaptions){
     regions = [];
+    captions = initialCaptions ? initialCaptions.slice() : [];
     renderRegionList();
+    renderCaptionList();
     sourceVideo.src = url;
     sourceVideo.onloadedmetadata = function(){
       editCanvas.width = sourceVideo.videoWidth;
@@ -382,9 +467,12 @@
       sourceVideo.removeAttribute('src');
       sourceVideo.load();
       regions = [];
+      captions = [];
       renderRegionList();
+      renderCaptionList();
       if(videoFileInput) videoFileInput.value = '';
       if(projectFileInput) projectFileInput.value = '';
+      if(subtitleFileInput) subtitleFileInput.value = '';
       editorWork.hidden = true;
       editorEmpty.hidden = false;
       removeVideoBtn.hidden = true;
@@ -428,6 +516,12 @@
     ctx.drawImage(sourceVideo, 0, 0, editCanvas.width, editCanvas.height);
     drawRegionsOnCanvas(ctx);
     if(watermarkImg) drawWatermarkOnCanvas(ctx);
+    
+    var burnEl = document.getElementById('exportBurnCaptions');
+    if(burnEl && burnEl.checked && captions.length > 0){
+      drawCaptionsOnCanvas(ctx);
+    }
+    
     if(liveRect) drawLiveRectPreview();
     var readoutTime = document.getElementById('readoutTime');
     if(readoutTime) readoutTime.textContent = fmt(sourceVideo.currentTime) + ' / ' + fmt(sourceVideo.duration);
@@ -477,6 +571,64 @@
     targetCtx.save();
     targetCtx.globalAlpha = 0.85;
     targetCtx.drawImage(watermarkImg, x, y, w, h);
+    targetCtx.restore();
+  }
+
+  function drawCaptionsOnCanvas(targetCtx){
+    var curTime = sourceVideo.currentTime;
+    var activeCue = null;
+    for(var i = 0; i < captions.length; i++){
+      if(curTime >= captions[i].startTime && curTime <= captions[i].endTime){
+        activeCue = captions[i];
+        break;
+      }
+    }
+    if(!activeCue || !activeCue.text) return;
+
+    var fontSize = Math.max(22, Math.floor(editCanvas.width * 0.032));
+    targetCtx.save();
+    targetCtx.font = '700 ' + fontSize + 'px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    targetCtx.textAlign = 'center';
+    targetCtx.textBaseline = 'middle';
+
+    var words = activeCue.text.split(' ');
+    var lines = [];
+    var currentLine = '';
+    var maxLineW = Math.floor(editCanvas.width * 0.85);
+
+    for(var w = 0; w < words.length; w++){
+      var testLine = currentLine ? (currentLine + ' ' + words[w]) : words[w];
+      if(targetCtx.measureText(testLine).width > maxLineW && currentLine){
+        lines.push(currentLine);
+        currentLine = words[w];
+      } else {
+        currentLine = testLine;
+      }
+    }
+    if(currentLine) lines.push(currentLine);
+
+    var padX = fontSize * 0.8;
+    var padY = fontSize * 0.4;
+    var lineHeight = fontSize * 1.35;
+    var totalTextW = 0;
+    lines.forEach(function(l){ totalTextW = Math.max(totalTextW, targetCtx.measureText(l).width); });
+    
+    var boxW = Math.min(editCanvas.width * 0.9, totalTextW + padX * 2);
+    var boxH = (lines.length * lineHeight) + padY * 2 - (lineHeight - fontSize);
+    var cx = editCanvas.width / 2;
+    var cy = editCanvas.height - boxH/2 - Math.floor(editCanvas.height * 0.06);
+
+    targetCtx.fillStyle = 'rgba(0, 0, 0, 0.82)';
+    targetCtx.beginPath();
+    if(targetCtx.roundRect) targetCtx.roundRect(cx - boxW/2, cy - boxH/2, boxW, boxH, 12);
+    else targetCtx.rect(cx - boxW/2, cy - boxH/2, boxW, boxH);
+    targetCtx.fill();
+
+    targetCtx.fillStyle = '#facc15';
+    var startY = cy - ((lines.length - 1) * lineHeight) / 2;
+    lines.forEach(function(line, idx){
+      targetCtx.fillText(line, cx, startY + (idx * lineHeight));
+    });
     targetCtx.restore();
   }
 
@@ -612,6 +764,171 @@
     });
   }
 
+  // ---------- Subtitle / Caption Management ----------
+  if(addCaptionBtn){
+    addCaptionBtn.addEventListener('click', function(){
+      var curTime = sourceVideo.currentTime || 0;
+      var maxDur = sourceVideo.duration || 100;
+      captions.push({
+        startTime: curTime,
+        endTime: Math.min(curTime + 3, maxDur),
+        text: 'New Subtitle Cue'
+      });
+      captions.sort(function(a, b){ return a.startTime - b.startTime; });
+      renderCaptionList();
+      drawCurrentFrame();
+    });
+  }
+
+  if(clearCaptionsBtn){
+    clearCaptionsBtn.addEventListener('click', function(){
+      captions = [];
+      renderCaptionList();
+      drawCurrentFrame();
+    });
+  }
+
+  if(subtitleFileInput){
+    subtitleFileInput.addEventListener('change', function(){
+      var f = subtitleFileInput.files[0];
+      if(!f) return;
+      var reader = new FileReader();
+      reader.onload = function(e){
+        try{
+          parseSubtitleFile(e.target.result);
+          renderCaptionList();
+          drawCurrentFrame();
+          alert('Subtitles imported successfully!');
+        }catch(err){
+          alert('Could not parse subtitle file: ' + err.message);
+        }
+      };
+      reader.readAsText(f);
+      subtitleFileInput.value = '';
+    });
+  }
+
+  function parseSubtitleFile(text){
+    captions = [];
+    var lines = text.replace(/\r\n/g, '\n').split('\n');
+    var cue = null;
+    for(var i = 0; i < lines.length; i++){
+      var line = lines[i].trim();
+      if(line.indexOf('-->') !== -1){
+        var parts = line.split('-->');
+        if(parts.length === 2){
+          cue = { startTime: parseTimecode(parts[0].trim()), endTime: parseTimecode(parts[1].trim()), text: '' };
+          captions.push(cue);
+        }
+      } else if(cue && line !== '' && !/^\d+$/.test(line) && line !== 'WEBVTT'){
+        cue.text = cue.text ? (cue.text + ' ' + line) : line;
+      } else if(line === ''){
+        cue = null;
+      }
+    }
+  }
+
+  function parseTimecode(tc){
+    var parts = tc.replace(',', '.').split(':');
+    if(parts.length === 3){
+      return parseFloat(parts[0]) * 3600 + parseFloat(parts[1]) * 60 + parseFloat(parts[2]);
+    } else if(parts.length === 2){
+      return parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
+    }
+    return 0;
+  }
+
+  function formatSrtTimecode(sec){
+    var h = Math.floor(sec / 3600);
+    var m = Math.floor((sec % 3600) / 60);
+    var s = Math.floor(sec % 60);
+    var ms = Math.floor((sec % 1) * 1000);
+    return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s + ',' + (ms < 100 ? (ms < 10 ? '00' : '0') : '') + ms;
+  }
+
+  if(exportSrtBtn){
+    exportSrtBtn.addEventListener('click', function(){
+      if(captions.length === 0){ alert('No subtitles to export!'); return; }
+      var srtText = '';
+      captions.forEach(function(c, i){
+        srtText += (i + 1) + '\r\n';
+        srtText += formatSrtTimecode(c.startTime) + ' --> ' + formatSrtTimecode(c.endTime) + '\r\n';
+        srtText += c.text + '\r\n\r\n';
+      });
+      var blob = new Blob([srtText], { type: 'text/plain' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = 'subtitles.srt';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    });
+  }
+
+  function renderCaptionList(){
+    if(!captionList) return;
+    captionList.innerHTML = '';
+    if(clearCaptionsBtn) clearCaptionsBtn.hidden = (captions.length === 0);
+
+    captions.forEach(function(c, i){
+      var div = document.createElement('div');
+      div.className = 'caption-item';
+      div.innerHTML = 
+        '<span class="swatch" style="background:#facc15"></span>' +
+        '<input type="text" class="caption-text-input" data-i="' + i + '" value="' + c.text.replace(/"/g, '&quot;') + '" placeholder="Subtitle text...">' +
+        '<div class="caption-time-controls">' +
+          '<div class="caption-time-group">' +
+            'Start: <input type="number" class="caption-time-input start-input" data-i="' + i + '" min="0" max="' + (sourceVideo.duration || 100) + '" step="0.1" value="' + (c.startTime.toFixed(1)) + '">s' +
+          '</div>' +
+          '<div class="caption-time-group">' +
+            'End: <input type="number" class="caption-time-input end-input" data-i="' + i + '" min="0" max="' + (sourceVideo.duration || 100) + '" step="0.1" value="' + (c.endTime.toFixed(1)) + '">s' +
+          '</div>' +
+          '<button class="remove-btn" data-i="' + i + '">Remove</button>' +
+        '</div>';
+      captionList.appendChild(div);
+    });
+
+    captionList.querySelectorAll('.caption-text-input').forEach(function(inp){
+      inp.addEventListener('input', function(){
+        var idx = parseInt(inp.dataset.i);
+        captions[idx].text = inp.value;
+        drawCurrentFrame();
+      });
+    });
+
+    captionList.querySelectorAll('.start-input').forEach(function(inp){
+      inp.addEventListener('change', function(){
+        var idx = parseInt(inp.dataset.i);
+        var val = parseFloat(inp.value) || 0;
+        captions[idx].startTime = Math.max(0, Math.min(val, captions[idx].endTime));
+        inp.value = captions[idx].startTime.toFixed(1);
+        drawCurrentFrame();
+      });
+    });
+
+    captionList.querySelectorAll('.end-input').forEach(function(inp){
+      inp.addEventListener('change', function(){
+        var idx = parseInt(inp.dataset.i);
+        var val = parseFloat(inp.value) || 0;
+        var maxDur = sourceVideo.duration || 100;
+        captions[idx].endTime = Math.max(captions[idx].startTime, Math.min(val, maxDur));
+        inp.value = captions[idx].endTime.toFixed(1);
+        drawCurrentFrame();
+      });
+    });
+
+    captionList.querySelectorAll('.remove-btn').forEach(function(b){
+      b.addEventListener('click', function(){
+        captions.splice(parseInt(b.dataset.i), 1);
+        renderCaptionList();
+        drawCurrentFrame();
+      });
+    });
+  }
+
+  var exportBurnCaptionsEl = document.getElementById('exportBurnCaptions');
+  if(exportBurnCaptionsEl){
+    exportBurnCaptionsEl.addEventListener('change', function(){ drawCurrentFrame(); });
+  }
+
   // ---------- save & load project (.json) ----------
   var saveProjectBtn = document.getElementById('saveProjectBtn');
   var loadProjectBtn = document.getElementById('loadProjectBtn');
@@ -624,7 +941,8 @@
         version: '1.0',
         trimStart: parseFloat(trimStart.value),
         trimEnd: parseFloat(trimEnd.value),
-        regions: regions
+        regions: regions,
+        captions: captions
       };
       var blob = new Blob([JSON.stringify(projectData, null, 2)], { type: 'application/json' });
       var url = URL.createObjectURL(blob);
@@ -644,10 +962,12 @@
         try{
           var data = JSON.parse(e.target.result);
           if(data.regions) regions = data.regions;
+          if(data.captions) captions = data.captions;
           if(data.trimStart !== undefined) trimStart.value = data.trimStart;
           if(data.trimEnd !== undefined) trimEnd.value = data.trimEnd;
           updateLabels();
           renderRegionList();
+          renderCaptionList();
           drawCurrentFrame();
           alert('Project settings loaded successfully!');
         }catch(err){
@@ -750,6 +1070,11 @@
         ctx.drawImage(sourceVideo, 0, 0, editCanvas.width, editCanvas.height);
         drawRegionsOnCanvas(ctx);
         if(watermarkImg) drawWatermarkOnCanvas(ctx);
+        
+        var burnEl = document.getElementById('exportBurnCaptions');
+        if(burnEl && burnEl.checked && captions.length > 0){
+          drawCaptionsOnCanvas(ctx);
+        }
         
         var progress = Math.min(100, ((sourceVideo.currentTime - start) / duration) * 100);
         exportProgressBar.style.width = progress + '%';
@@ -910,7 +1235,7 @@
     return new Blob([view], { type: 'audio/wav' });
   }
 
-  // ================= SCREENSHOT & ANNOTATE TAB =================
+  // ================= SCREENSHOT & FORMAT CONVERTER TAB =================
   var captureShotBtn = document.getElementById('captureShotBtn');
   var captureAreaBtn = document.getElementById('captureAreaBtn');
   var shotFileInput = document.getElementById('shotFileInput');
@@ -921,11 +1246,50 @@
   var removeShotBtn = document.getElementById('removeShotBtn');
   var sctx = shotCanvas ? shotCanvas.getContext('2d') : null;
 
+  var shotFormatSelect = document.getElementById('shotFormatSelect');
+  var shotQuality = document.getElementById('shotQuality');
+  var shotQualityLabel = document.getElementById('shotQualityLabel');
+  var shotQualityBox = document.getElementById('shotQualityBox');
+
   var shotImage = null;
   var shotAnnotations = [];
   var shotColor = '#e35d5d';
   var shotTool = null;
   var shotDrawing = false, shotStart = null, shotLive = null;
+
+  // ---------- Global Paste Listener (Ctrl+V / Cmd+V) ----------
+  window.addEventListener('paste', function(e){
+    var items = (e.clipboardData || e.originalEvent.clipboardData).items;
+    for(var i = 0; i < items.length; i++){
+      if(items[i].type.indexOf('image') !== -1){
+        var file = items[i].getAsFile();
+        if(file){
+          handleImageUpload(file);
+          var shotSec = document.getElementById('screenshot');
+          if(shotSec) shotSec.scrollIntoView({ behavior: 'smooth' });
+          break;
+        }
+      }
+    }
+  });
+
+  if(shotFormatSelect && shotQualityBox){
+    shotFormatSelect.addEventListener('change', function(){
+      var fmt = shotFormatSelect.value;
+      if(fmt === 'image/jpeg' || fmt === 'image/webp'){
+        shotQualityBox.style.display = 'flex';
+      } else {
+        shotQualityBox.style.display = 'none';
+      }
+    });
+  }
+
+  if(shotQuality && shotQualityLabel){
+    shotQualityLabel.textContent = Math.round(parseFloat(shotQuality.value) * 100) + '%';
+    shotQuality.addEventListener('input', function(){
+      shotQualityLabel.textContent = Math.round(parseFloat(shotQuality.value) * 100) + '%';
+    });
+  }
 
   async function captureFullFrame(){
     var stream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: false });
@@ -1311,8 +1675,22 @@
     });
   }
 
-  // ---------- Copy Images to Clipboard Helper ----------
+  // ---------- Copy & Format Conversion Helpers ----------
+  function getSelectedImageFormat(){
+    var sel = document.getElementById('shotFormatSelect');
+    var q = document.getElementById('shotQuality');
+    var mime = sel ? sel.value : 'image/png';
+    var quality = q ? parseFloat(q.value) : 0.92;
+    var ext = '.png';
+    if(mime === 'image/jpeg') ext = '.jpg';
+    else if(mime === 'image/webp') ext = '.webp';
+    else if(mime === 'image/bmp') ext = '.bmp';
+    return { mime: mime, quality: quality, ext: ext };
+  }
+
   function copyCanvasToClipboard(canvasEl, btnEl, defaultLabel){
+    var fmt = getSelectedImageFormat();
+    // Browsers natively require image/png in ClipboardItem constructor for stability
     canvasEl.toBlob(function(blob){
       try {
         var item = new ClipboardItem({ 'image/png': blob });
@@ -1320,16 +1698,29 @@
           btnEl.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied to Clipboard!';
           btnEl.classList.add('primary');
           setTimeout(function(){
-            btnEl.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2-2v1"/></svg> ' + defaultLabel;
+            btnEl.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> ' + defaultLabel;
             btnEl.classList.remove('primary');
           }, 2000);
         }).catch(function(err){
           alert('Could not copy to clipboard: ' + err.message);
         });
       } catch(e) {
-        alert('Clipboard API is not supported in this browser or requires a secure HTTPS/localhost connection.');
+        alert('Clipboard API is not supported in this browser or requires a secure HTTPS connection.');
       }
     }, 'image/png');
+  }
+
+  function downloadCanvasFormatted(canvasEl, filenameBase){
+    var fmt = getSelectedImageFormat();
+    canvasEl.toBlob(function(blob){
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = filenameBase + fmt.ext;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }, fmt.mime, fmt.quality);
   }
 
   var shotCopyOriginalBtn = document.getElementById('shotCopyOriginalBtn');
@@ -1341,13 +1732,13 @@
       var c = document.createElement('canvas');
       c.width = shotImage.width; c.height = shotImage.height;
       c.getContext('2d').drawImage(shotImage, 0, 0);
-      copyCanvasToClipboard(c, shotCopyOriginalBtn, 'Copy original');
+      copyCanvasToClipboard(c, shotCopyOriginalBtn, 'Copy Original');
     });
   }
 
   if(shotCopyEditedBtn){
     shotCopyEditedBtn.addEventListener('click', function(){
-      copyCanvasToClipboard(shotCanvas, shotCopyEditedBtn, 'Copy edited');
+      copyCanvasToClipboard(shotCanvas, shotCopyEditedBtn, 'Copy Converted');
     });
   }
 
@@ -1360,24 +1751,13 @@
       var c = document.createElement('canvas');
       c.width = shotImage.width; c.height = shotImage.height;
       c.getContext('2d').drawImage(shotImage, 0, 0);
-      downloadCanvas(c, 'screenshot-original.png');
+      downloadCanvasFormatted(c, 'image-original');
     });
   }
   if(shotDownloadEditedBtn){
     shotDownloadEditedBtn.addEventListener('click', function(){
-      downloadCanvas(shotCanvas, 'screenshot-edited.png');
+      downloadCanvasFormatted(shotCanvas, 'image-converted');
     });
-  }
-
-  function downloadCanvas(canvasEl, filename){
-    canvasEl.toBlob(function(blob){
-      var url = URL.createObjectURL(blob);
-      var a = document.createElement('a');
-      a.href = url; a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }, 'image/png');
   }
 
   // ================= COMBINE MEDIA TAB =================
