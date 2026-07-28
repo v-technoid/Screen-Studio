@@ -1311,6 +1311,46 @@
     });
   }
 
+  // ---------- Copy Images to Clipboard Helper ----------
+  function copyCanvasToClipboard(canvasEl, btnEl, defaultLabel){
+    canvasEl.toBlob(function(blob){
+      try {
+        var item = new ClipboardItem({ 'image/png': blob });
+        navigator.clipboard.write([item]).then(function(){
+          btnEl.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied to Clipboard!';
+          btnEl.classList.add('primary');
+          setTimeout(function(){
+            btnEl.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2-2v1"/></svg> ' + defaultLabel;
+            btnEl.classList.remove('primary');
+          }, 2000);
+        }).catch(function(err){
+          alert('Could not copy to clipboard: ' + err.message);
+        });
+      } catch(e) {
+        alert('Clipboard API is not supported in this browser or requires a secure HTTPS/localhost connection.');
+      }
+    }, 'image/png');
+  }
+
+  var shotCopyOriginalBtn = document.getElementById('shotCopyOriginalBtn');
+  var shotCopyEditedBtn = document.getElementById('shotCopyEditedBtn');
+
+  if(shotCopyOriginalBtn){
+    shotCopyOriginalBtn.addEventListener('click', function(){
+      if(!shotImage) return;
+      var c = document.createElement('canvas');
+      c.width = shotImage.width; c.height = shotImage.height;
+      c.getContext('2d').drawImage(shotImage, 0, 0);
+      copyCanvasToClipboard(c, shotCopyOriginalBtn, 'Copy original');
+    });
+  }
+
+  if(shotCopyEditedBtn){
+    shotCopyEditedBtn.addEventListener('click', function(){
+      copyCanvasToClipboard(shotCanvas, shotCopyEditedBtn, 'Copy edited');
+    });
+  }
+
   var shotDownloadOriginalBtn = document.getElementById('shotDownloadOriginalBtn');
   var shotDownloadEditedBtn = document.getElementById('shotDownloadEditedBtn');
 
