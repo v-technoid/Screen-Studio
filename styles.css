@@ -372,6 +372,10 @@ input[type=range]{ flex:1; accent-color: var(--accent); height: 6px; border-radi
   gap: 8px 16px;             /* Adds spacing between items */
 }
 
+.footer-bottom span {
+  display: inline-block; /* Prevents text from stacking vertically */
+}
+
 /* Optional: Adds a subtle bullet separator (•) between each item on desktop */
 .footer-bottom span:not(:last-child)::after {
   content: "•";
@@ -502,3 +506,25 @@ input[type=range]{ flex:1; accent-color: var(--accent); height: 6px; border-radi
 .accent-link { color: var(--accent); text-decoration: none; }
 .accent-link:hover { text-decoration: underline; }
 .badge-neutral { background: var(--bg-soft); color: var(--text); border-color: var(--line); }
+
+.badge-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    align-items: center;
+    max-width: 420px; /* Keeps the grid from stretching too wide */
+    margin-top: 16px;
+  }
+  
+  .badge-grid a,
+  .badge-grid div {
+    display: flex;
+    justify-content: flex-start; /* Aligns badges to the left within their cell */
+    margin: 0 !important; /* Removes any conflicting inline margins */
+  }
+
+  .badge-grid img {
+    height: 48px !important; /* Forces all badges to be the exact same height */
+    width: auto !important;  /* Maintains original aspect ratio without stretching */
+    object-fit: contain;
+  }
