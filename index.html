@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Free Online &amp; Offline Screen Recorder | Screen Studio</title>
-<meta name="description" content="Free online screen recorder with no watermark. Capture your screen, webcam, and audio offline right in the browser. No sign-up required.">
-<meta name="google-site-verification" content="cFV3uS6pG3Lb2YZyV-C8hld0H2gWHJYtIBy7OKsw2Ts" />
-<link rel="canonical" href="https://screen-studio-seven.vercel.app/">
-<link rel="alternate" hreflang="en" href="https://screen-studio-seven.vercel.app/">
-<link rel="alternate" hreflang="x-default" href="https://screen-studio-seven.vercel.app/">
-<meta name="keywords" content="free screen recorder online, offline screen recorder no watermark, screen recorder no signup, browser screen recorder, private screen recorder">
+  <title>Free Online &amp; Offline Screen Recorder | Screen Studio</title>
+  <meta name="description"
+    content="Free online screen recorder with no watermark. Capture your screen, webcam, and audio offline right in the browser. No sign-up required.">
+  <meta name="google-site-verification" content="cFV3uS6pG3Lb2YZyV-C8hld0H2gWHJYtIBy7OKsw2Ts" />
+  <link rel="canonical" href="https://screen-studio-seven.vercel.app/">
+  <link rel="alternate" hreflang="en" href="https://screen-studio-seven.vercel.app/">
+  <link rel="alternate" hreflang="x-default" href="https://screen-studio-seven.vercel.app/">
+  <meta name="keywords"
+    content="free screen recorder online, offline screen recorder no watermark, screen recorder no signup, browser screen recorder, private screen recorder">
 
-<!-- Open Graph / Social Media Meta -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://screen-studio-seven.vercel.app/">
-<!-- OG Title -->
-<meta property="og:title" content="Free Online & Offline Screen Recorder | Screen Studio">
-<meta property="og:description" content="Free online screen recorder with no watermark. Capture your screen, webcam, and audio offline right in the browser. No sign-up required.">
-<!-- The image that messaging apps will grab for the preview -->
-<meta property="og:image" content="https://screen-studio-seven.vercel.app/asset/icon.png">
+  <!-- Open Graph / Social Media Meta -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://screen-studio-seven.vercel.app/">
+  <!-- OG Title -->
+  <meta property="og:title" content="Free Online & Offline Screen Recorder | Screen Studio">
+  <meta property="og:description"
+    content="Free online screen recorder with no watermark. Capture your screen, webcam, and audio offline right in the browser. No sign-up required.">
+  <!-- The image that messaging apps will grab for the preview -->
+  <meta property="og:image" content="https://screen-studio-seven.vercel.app/asset/icon.png">
 
-<!-- Browser Favicon -->
-<link rel="icon" type="image/png" href="asset/icon.png">
-<link rel="stylesheet" href="styles.css">
+  <!-- Browser Favicon -->
+  <link rel="icon" type="image/png" href="asset/icon.png">
+  <link rel="stylesheet" href="styles.css">
 
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
-<script type="application/ld+json">
+  <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
@@ -48,723 +52,965 @@
   }
 }
 </script>
-<script src="https://code.market/widget.min.js" async></script>
+  <script src="https://code.market/widget.min.js" async></script>
 </head>
+
 <body>
 
-<header class="topbar">
-  <div class="topbar-inner">
-    <a class="brand" href="#top"><span class="brand-dot"></span>Screen Studio</a>
-    <span class="badge-offline">
-      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      Everything runs on your device
-    </span>
-    <button class="icon-btn" id="themeToggleBtn" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
-    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-  <nav class="topnav-mobile" id="mobileNav">
-    <a href="#record">Record</a>
-    <a href="#editor">Trim &amp; blur</a>
-    <a href="#audio">Audio trimmer</a>
-    <a href="#screenshot">Screenshot &amp; annotate</a>
-    <a href="#combine">Combine videos &amp; images</a>
-    <a href="#author">About Author</a>
-  </nav>
-</header>
-
-<div class="layout">
-
-  <aside class="side-nav">
-    <p class="side-nav-label">Tools</p>
-    <nav>
-      <a href="#record" data-target="record">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg>
-        Screen recorder
-      </a>
-      <a href="#editor" data-target="editor">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v18M18 3v18M3 6h18M3 18h18"/></svg>
-        Trim, mark &amp; blur
-      </a>
-      <a href="#audio" data-target="audio">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="12" x2="4" y2="12"/><line x1="8" y1="8" x2="8" y2="16"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="16" y1="8" x2="16" y2="16"/><line x1="20" y1="12" x2="20" y2="12"/></svg>
-        Audio trimmer
-      </a>
-      <a href="#screenshot" data-target="screenshot">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        Screenshot &amp; Converter
-      </a>
-      <a href="#combine" data-target="combine">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/><path d="M8 13v3a2 2 0 0 0 2 2h3"/><path d="M16 11V8a2 2 0 0 0-2-2h-3"/></svg>
-        Combine media
-      </a>
-      <a href="#author" data-target="author">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        About Author
-      </a>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top"><span class="brand-dot"></span>Screen Studio</a>
+      <span class="badge-offline">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        </svg>
+        Everything runs on your device
+      </span>
+      <button class="icon-btn" id="themeToggleBtn" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="topnav-mobile" id="mobileNav">
+      <a href="#record">Record</a>
+      <a href="#editor">Trim &amp; blur</a>
+      <a href="#audio">Audio trimmer</a>
+      <a href="#screenshot">Screenshot &amp; annotate</a>
+      <a href="#combine">Combine videos &amp; images</a>
+      <a href="#author">About Author</a>
     </nav>
-  </aside>
+  </header>
 
-  <div class="content-wrap">
+  <div class="layout">
 
-    <section class="hero" id="top">
-      <h1 id="heroTitle">
-        <span class="hero-word">Free</span> 
-        <span class="hero-word">Online</span> 
-        <span class="hero-word">&amp;</span> 
-        <span class="hero-word">Offline</span> 
-        <span class="hero-word">Screen</span> 
-        <span class="hero-word">Recorder</span>
-      </h1>
-      <p class="hero-sub">
-        Record your <strong>screen, webcam, system audio, and microphone</strong> for free online directly in your browser. 
-        <strong>No sign-up required, no watermarks added</strong>, and your recordings never leave your device.
-      </p>
-      
-      <ul class="trust-list">
-        <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> 100% Free &amp; No Sign-Up</li>
-        <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> No Watermarks on Exports</li>
-        <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Works 100% Offline</li>
-        <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Zero Server Uploads</li>
-      </ul>
+    <aside class="side-nav">
+      <p class="side-nav-label">Tools</p>
+      <nav>
+        <a href="#record" data-target="record">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="8" />
+            <circle cx="12" cy="12" r="3" fill="currentColor" />
+          </svg>
+          Screen recorder
+        </a>
+        <a href="#editor" data-target="editor">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 3v18M18 3v18M3 6h18M3 18h18" />
+          </svg>
+          Trim, mark &amp; blur
+        </a>
+        <a href="#audio" data-target="audio">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round">
+            <line x1="4" y1="12" x2="4" y2="12" />
+            <line x1="8" y1="8" x2="8" y2="16" />
+            <line x1="12" y1="4" x2="12" y2="20" />
+            <line x1="16" y1="8" x2="16" y2="16" />
+            <line x1="20" y1="12" x2="20" y2="12" />
+          </svg>
+          Audio trimmer
+        </a>
+        <a href="#screenshot" data-target="screenshot">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+            <circle cx="12" cy="13" r="4" />
+          </svg>
+          Screenshot &amp; Converter
+        </a>
+        <a href="#combine" data-target="combine">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="8" height="8" rx="1.5" />
+            <rect x="13" y="13" width="8" height="8" rx="1.5" />
+            <path d="M8 13v3a2 2 0 0 0 2 2h3" />
+            <path d="M16 11V8a2 2 0 0 0-2-2h-3" />
+          </svg>
+          Combine media
+        </a>
+        <a href="#author" data-target="author">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          About Author
+        </a>
+      </nav>
+    </aside>
 
-      <div class="proof-points-card">
-        <div class="proof-item">
-          <span class="proof-icon">🌐</span>
-          <div>
-            <strong>Offline Capability Proof:</strong>
-            <p>Once this page loads once in your browser cache, you can disconnect your Wi-Fi or internet connection completely. The recorder, webcam overlay, video trimmer, and exports will keep working 100% offline.</p>
+    <div class="content-wrap">
+
+      <section class="hero" id="top">
+        <h1 id="heroTitle">
+          <span class="hero-word">Free</span>
+          <span class="hero-word">Online</span>
+          <span class="hero-word">&amp;</span>
+          <span class="hero-word">Offline</span>
+          <span class="hero-word">Screen</span>
+          <span class="hero-word">Recorder</span>
+        </h1>
+        <p class="hero-sub">
+          Record your <strong>screen, webcam, system audio, and microphone</strong> for free online directly in your
+          browser.
+          <strong>No sign-up required, no watermarks added</strong>, and your recordings never leave your device.
+        </p>
+
+        <ul class="trust-list">
+          <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#16a34a" stroke-width="2.5"
+              stroke-linecap="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg> 100% Free &amp; No Sign-Up</li>
+          <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#16a34a" stroke-width="2.5"
+              stroke-linecap="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg> No Watermarks on Exports</li>
+          <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#16a34a" stroke-width="2.5"
+              stroke-linecap="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg> Works 100% Offline</li>
+          <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#16a34a" stroke-width="2.5"
+              stroke-linecap="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg> Zero Server Uploads</li>
+        </ul>
+
+        <div class="proof-points-card">
+          <div class="proof-item">
+            <span class="proof-icon">🌐</span>
+            <div>
+              <strong>Offline Capability Proof:</strong>
+              <p>Once this page loads once in your browser cache, you can disconnect your Wi-Fi or internet connection
+                completely. The recorder, webcam overlay, video trimmer, and exports will keep working 100% offline.</p>
+            </div>
+          </div>
+          <div class="proof-item">
+            <span class="proof-icon">🚫</span>
+            <div>
+              <strong>Clean, Watermark-Free Recordings:</strong>
+              <p>We never slap watermarks, logos, or brand overlays on your exported videos. What you capture is 100%
+                clean and yours to keep.</p>
+            </div>
           </div>
         </div>
-        <div class="proof-item">
-          <span class="proof-icon">🚫</span>
-          <div>
-            <strong>Clean, Watermark-Free Recordings:</strong>
-            <p>We never slap watermarks, logos, or brand overlays on your exported videos. What you capture is 100% clean and yours to keep.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section class="tool-grid-section">
-      <h2 class="eyebrow-center">Browser-Based Screen Recording Tools</h2>
-      <div class="tool-grid">
-        <a class="tool-card reveal" href="#record">
-          <span class="tool-icon rec"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg></span>
-          <span class="tool-name">Screen Recorder</span>
-          <span class="tool-desc">Capture screen, webcam overlay (PiP), mixed audio, and live teleprompter captions.</span>
-        </a>
-        <a class="tool-card reveal" href="#editor">
-          <span class="tool-icon edit"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>
-          <span class="tool-name">Trim, Mark &amp; Blur</span>
-          <span class="tool-desc">Cut clips, blur areas, edit subtitles, burn captions, and adjust speed.</span>
-        </a>
-        <a class="tool-card reveal" href="#audio">
-          <span class="tool-icon audio"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="12" x2="4" y2="12"/><line x1="8" y1="8" x2="8" y2="16"/><line x1="12" y1="4" x2="12" y2="20"/><line x1="16" y1="8" x2="16" y2="16"/><line x1="20" y1="12" x2="20" y2="12"/></svg></span>
-          <span class="tool-name">Audio Trimmer</span>
-          <span class="tool-desc">Load any audio file and export just the section you need.</span>
-        </a>
-        <a class="tool-card reveal" href="#screenshot">
-          <span class="tool-icon shot"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>
-          <span class="tool-name">Screenshot &amp; Format Converter</span>
-          <span class="tool-desc">Paste/upload images, convert formats (PNG/JPG/WEBP/BMP), OCR text, &amp; annotate.</span>
-        </a>
-        <a class="tool-card reveal" href="#combine">
-          <span class="tool-icon combine"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/><path d="M8 13v3a2 2 0 0 0 2 2h3"/><path d="M16 11V8a2 2 0 0 0-2-2h-3"/></svg></span>
-          <span class="tool-name">Combine Videos &amp; Images</span>
-          <span class="tool-desc">Stitch clips or images together, in whatever order you choose.</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- RECORD -->
-    <section id="record" class="tool-section">
-      <p class="eyebrow">Free Online Screen recorder</p>
-      <div class="panel reveal">
-        <h2>Offline Screen Recorder (No Watermark)</h2>
-        <p class="hint" id="recHintText">Select your inputs below before starting. You can include a live webcam bubble overlay (PiP), system meeting audio, your external microphone, and live voice teleprompter subtitles!</p>
-        
-        <div class="audio-options-row" id="recAudioOptions">
-          <label class="audio-toggle-card">
-            <input type="checkbox" id="recWebcamPip">
-            <div class="audio-toggle-text">
-              <span class="audio-toggle-title">Webcam Overlay (PiP)</span>
-              <span class="audio-toggle-desc">Embeds a circular camera bubble in the bottom corner of your screen recording. Perfect for tutorials and presentations!</span>
-            </div>
-          </label>
-
-          <label class="audio-toggle-card">
-            <input type="checkbox" id="recSystemAudio">
-            <div class="audio-toggle-text">
-              <span class="audio-toggle-title">System / Tab Audio</span>
-              <span class="audio-toggle-desc">Captures sound from the recorded app or tab (what other people say in meetings). Make sure to check "Share audio" in the browser popup!</span>
-            </div>
-          </label>
-
-          <label class="audio-toggle-card">
-            <input type="checkbox" id="recMicAudio">
-            <div class="audio-toggle-text">
-              <span class="audio-toggle-title">Microphone Audio</span>
-              <span class="audio-toggle-desc">Captures your voice from your connected headset or USB microphone. Works seamlessly alongside system audio!</span>
-            </div>
-          </label>
-
-          <label class="audio-toggle-card">
-            <input type="checkbox" id="recAutoCaptions">
-            <div class="audio-toggle-text">
-              <span class="audio-toggle-title">Live Speech-to-Text Captions</span>
-              <span class="audio-toggle-desc">Uses native browser speech recognition to automatically transcribe your voice in real time while you record!</span>
-            </div>
-          </label>
-        </div>
-
-        <div class="row" id="recControlsRow">
-          <button class="btn primary" id="startRecBtn">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>
-            Start recording
-          </button>
-          <button class="btn danger" id="stopRecBtn" disabled>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
-            Stop recording
-          </button>
-          <span id="recStatus" class="status"></span>
-        </div>
-
-        <div id="liveTranscribeBox" class="live-teleprompter-box" hidden>
-          <span class="live-teleprompter-label">
-            <span class="rec-dot pulsing blue-dot"></span>
-            Live Voice Transcription (Teleprompter)
-          </span>
-          <div id="liveTranscribeText" class="live-teleprompter-text">Listening for speech...</div>
-        </div>
-
-        <div id="mobileRecFallback" class="mobile-fallback" hidden>
-          <p><strong>📱 Mobile Device Detected:</strong> Live screen recording is restricted by mobile operating systems (iOS and Android). Please use your phone's built-in screen recorder from your Control Center or Quick Settings, then upload the video in the tool below to trim and edit it!</p>
-          <a href="#editor" class="btn primary">Go to Video Editor &darr;</a>
-        </div>
-
-        <div id="securityRecFallback" class="mobile-fallback warning-fallback" hidden>
-          <p><strong>🔒 Browser Security Notice:</strong> You are on a laptop/desktop, but your web browser has blocked the screen recording API because you opened this file directly from your folder (via <code>file://</code> protocol). To record your screen, please deploy this app to Vercel (which provides a secure HTTPS domain) or run it via a local web server!</p>
-          <a href="#editor" class="btn primary warning-btn">Use Video Editor Instead &darr;</a>
-        </div>
-      </div>
-
-      <div class="panel reveal" id="recResultPanel" hidden>
-        <h3>Recording ready</h3>
-        <div class="row">
-          <button class="btn primary" id="sendToEditorBtn">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-            Open in editor
-          </button>
-          <a class="link-btn" id="recDownloadLink" download="screen-recording.webm">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download .webm
+      <section class="tool-grid-section">
+        <h2 class="eyebrow-center">Browser-Based Screen Recording Tools</h2>
+        <div class="tool-grid">
+          <a class="tool-card reveal" href="#record">
+            <span class="tool-icon rec"><svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="9" />
+                <circle cx="12" cy="12" r="3" fill="currentColor" />
+              </svg></span>
+            <span class="tool-name">Screen Recorder</span>
+            <span class="tool-desc">Capture screen, webcam overlay (PiP), mixed audio, and live teleprompter
+              captions.</span>
+          </a>
+          <a class="tool-card reveal" href="#editor">
+            <span class="tool-icon edit"><svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="3" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <path d="M21 15l-5-5L5 21" />
+              </svg></span>
+            <span class="tool-name">Trim, Mark &amp; Blur</span>
+            <span class="tool-desc">Cut clips, blur areas, edit subtitles, burn captions, and adjust speed.</span>
+          </a>
+          <a class="tool-card reveal" href="#audio">
+            <span class="tool-icon audio"><svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <line x1="4" y1="12" x2="4" y2="12" />
+                <line x1="8" y1="8" x2="8" y2="16" />
+                <line x1="12" y1="4" x2="12" y2="20" />
+                <line x1="16" y1="8" x2="16" y2="16" />
+                <line x1="20" y1="12" x2="20" y2="12" />
+              </svg></span>
+            <span class="tool-name">Audio Trimmer</span>
+            <span class="tool-desc">Load any audio file and export just the section you need.</span>
+          </a>
+          <a class="tool-card reveal" href="#screenshot">
+            <span class="tool-icon shot"><svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                <circle cx="12" cy="13" r="4" />
+              </svg></span>
+            <span class="tool-name">Screenshot &amp; Format Converter</span>
+            <span class="tool-desc">Paste/upload images, convert formats (PNG/JPG/WEBP/BMP), OCR text, &amp;
+              annotate.</span>
+          </a>
+          <a class="tool-card reveal" href="#combine">
+            <span class="tool-icon combine"><svg viewBox="0 0 24 24" width="22" height="22" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="8" height="8" rx="1.5" />
+                <rect x="13" y="13" width="8" height="8" rx="1.5" />
+                <path d="M8 13v3a2 2 0 0 0 2 2h3" />
+                <path d="M16 11V8a2 2 0 0 0-2-2h-3" />
+              </svg></span>
+            <span class="tool-name">Combine Videos &amp; Images</span>
+            <span class="tool-desc">Stitch clips or images together, in whatever order you choose.</span>
           </a>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- EDITOR -->
-    <section id="editor" class="tool-section">
-      <p class="eyebrow">Trim, mark and blur</p>
-
-      <div class="panel reveal">
-        <h2>Video Editor &amp; Trimmer</h2>
-        <p class="hint">Use a fresh recording, upload any video file from your device, or reload a saved `.json` project file to restore your previous timeline, blur boxes, and subtitles.</p>
-        <div class="row">
-          <input type="file" id="videoFileInput" accept="video/*" title="Load Video">
-          <button class="btn" id="loadProjectBtn">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-            Resume Project (.json)
-          </button>
-          <input type="file" id="projectFileInput" accept=".json" hidden>
-          
-          <button class="btn danger" id="removeVideoBtn" hidden>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-            Remove Video
-          </button>
-        </div>
-      </div>
-
-      <p id="editorEmpty" class="empty">No video loaded yet.</p>
-
-      <div id="editorWork" hidden>
+      <!-- RECORD -->
+      <section id="record" class="tool-section">
+        <p class="eyebrow">Free Online Screen recorder</p>
         <div class="panel reveal">
-          <h3>Timeline &amp; Shortcuts <span class="shortcut-badge">Space: Play/Pause | &larr;/&rarr;: Step Frame</span></h3>
-          <div class="slider-row">
-            <label>Start</label>
-            <input type="range" id="trimStart" min="0" max="100" value="0" step="0.01">
-            <span id="trimStartLabel">0:00</span>
-          </div>
-          <div class="slider-row">
-            <label>End</label>
-            <input type="range" id="trimEnd" min="0" max="100" value="100" step="0.01">
-            <span id="trimEndLabel">0:00</span>
-          </div>
-          <div class="slider-row">
-            <label>Preview</label>
-            <input type="range" id="scrub" min="0" max="100" value="0" step="0.01">
-            <span id="scrubLabel">0:00</span>
-          </div>
-        </div>
+          <h2>Offline Screen Recorder (No Watermark)</h2>
+          <p class="hint" id="recHintText">Select your inputs below before starting. You can include a live webcam
+            bubble overlay (PiP), system meeting audio, your external microphone, and live voice teleprompter subtitles!
+          </p>
 
-        <div class="panel reveal">
-          <h3>Mark and blur areas <span class="shortcut-badge">M: Mark | B: Blur | Z: Undo</span></h3>
-          <p class="hint">Pick a tool, then drag on the preview to draw a box. You can set individual Start and End times for each box below so it appears only during specific timestamps.</p>
-          <div class="row">
-            <button class="btn" id="markToolBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-              Mark box
-            </button>
-            <button class="btn" id="blurToolBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/></svg>
-              Blur box
-            </button>
-            <button class="btn" id="noToolBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              Stop drawing
-            </button>
-            <button class="btn" id="undoRegionBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>
-              Undo last box
-            </button>
-          </div>
-          <div class="region-list" id="regionList"></div>
-        </div>
-
-        <div class="panel reveal">
-          <h3>Subtitles &amp; Captions Studio</h3>
-          <p class="hint">Import an existing `.srt` or `.vtt` file, edit cues manually below, export standard subtitle files, or burn styled caption text right onto your video during export!</p>
-          <div class="row">
-            <input type="file" id="subtitleFileInput" accept=".srt,.vtt" title="Load .srt / .vtt File">
-            <button class="btn" id="addCaptionBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Add Caption Cue
-            </button>
-            <button class="btn primary" id="exportSrtBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Download .srt File
-            </button>
-            <button class="btn danger" id="clearCaptionsBtn" hidden>
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-              Clear Captions
-            </button>
-          </div>
-          <div class="caption-list" id="captionList"></div>
-        </div>
-
-        <div class="panel reveal">
-          <h3>Pro Export Settings</h3>
-          
-          <div class="pro-controls-grid">
-            <div class="pro-control-box">
-              <span class="pro-control-label">Playback Speed</span>
-              <select id="exportSpeedSelect" class="pro-select">
-                <option value="0.5">0.5x (Slow Motion)</option>
-                <option value="1" selected>1.0x (Normal Speed)</option>
-                <option value="1.5">1.5x (Fast Speed)</option>
-                <option value="2">2.0x (Time-Lapse)</option>
-                <option value="4">4.0x (Super Time-Lapse)</option>
-              </select>
-            </div>
-
-            <div class="pro-control-box">
-              <span class="pro-control-label">Custom Watermark / Logo</span>
-              <input type="file" id="watermarkInput" accept="image/*" class="pro-select file-select-sm">
-            </div>
-
-            <div class="pro-control-box">
-              <span class="pro-control-label">Watermark Position</span>
-              <select id="watermarkPosSelect" class="pro-select">
-                <option value="top-left">Top Left</option>
-                <option value="top-right">Top Right</option>
-                <option value="bottom-left">Bottom Left</option>
-                <option value="bottom-right" selected>Bottom Right</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="audio-options-row export-audio-row">
+          <div class="audio-options-row" id="recAudioOptions">
             <label class="audio-toggle-card">
-              <input type="checkbox" id="exportBurnCaptions" checked>
+              <input type="checkbox" id="recWebcamPip">
               <div class="audio-toggle-text">
-                <span class="audio-toggle-title">Burn Captions into Video</span>
-                <span class="audio-toggle-desc">When checked, active subtitles are drawn onto the canvas and baked permanently into your exported WebM file!</span>
+                <span class="audio-toggle-title">Webcam Overlay (PiP)</span>
+                <span class="audio-toggle-desc">Embeds a circular camera bubble in the bottom corner of your screen
+                  recording. Perfect for tutorials and presentations!</span>
               </div>
             </label>
 
             <label class="audio-toggle-card">
-              <input type="checkbox" id="exportRemoveAudio">
+              <input type="checkbox" id="recSystemAudio">
               <div class="audio-toggle-text">
-                <span class="audio-toggle-title">Remove Audio (Mute Video)</span>
-                <span class="audio-toggle-desc">Check this box to strip all background sound and download your edited video without any audio.</span>
+                <span class="audio-toggle-title">System / Tab Audio</span>
+                <span class="audio-toggle-desc">Captures sound from the recorded app or tab (what other people say in
+                  meetings). Make sure to check "Share audio" in the browser popup!</span>
+              </div>
+            </label>
+
+            <label class="audio-toggle-card">
+              <input type="checkbox" id="recMicAudio">
+              <div class="audio-toggle-text">
+                <span class="audio-toggle-title">Microphone Audio</span>
+                <span class="audio-toggle-desc">Captures your voice from your connected headset or USB microphone. Works
+                  seamlessly alongside system audio!</span>
+              </div>
+            </label>
+
+            <label class="audio-toggle-card">
+              <input type="checkbox" id="recAutoCaptions">
+              <div class="audio-toggle-text">
+                <span class="audio-toggle-title">Live Speech-to-Text Captions</span>
+                <span class="audio-toggle-desc">Uses native browser speech recognition to automatically transcribe your
+                  voice in real time while you record!</span>
               </div>
             </label>
           </div>
 
-          <div class="stage">
-            <div class="readout">
-              <span id="readoutTime">00:00 / 00:00</span>
-              <span id="readoutRes"></span>
-            </div>
-            <video class="hidden-source" id="sourceVideo" playsinline muted></video>
-            <canvas id="editCanvas"></canvas>
-            <div class="row">
-              <button class="btn primary" id="exportBtn">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Export final video
-              </button>
-              <button class="btn" id="saveProjectBtn">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                Save Project File (.json)
-              </button>
-            </div>
-            <div class="progress-wrap" id="exportProgressWrap"><div class="progress-bar" id="exportProgressBar"></div></div>
-            <div id="exportResult"></div>
+          <div class="row" id="recControlsRow">
+            <button class="btn primary" id="startRecBtn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <circle cx="12" cy="12" r="8" />
+              </svg>
+              Start recording
+            </button>
+            <button class="btn danger" id="stopRecBtn" disabled>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <rect x="6" y="6" width="12" height="12" rx="2" />
+              </svg>
+              Stop recording
+            </button>
+            <span id="recStatus" class="status"></span>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- AUDIO -->
-    <section id="audio" class="tool-section">
-      <p class="eyebrow">Audio trimmer</p>
-      <div class="panel reveal">
-        <h2>Free Audio Trimmer</h2>
-        <p class="hint">Loads an audio file, lets you pick a start and end point, exports that section as a WAV file.</p>
-        <div class="row">
-          <input type="file" id="audioFileInput" accept="audio/*">
-          <button class="btn danger" id="removeAudioBtn" hidden>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-            Remove Audio
-          </button>
-        </div>
-      </div>
-
-      <p id="audioEmpty" class="empty">No audio loaded yet.</p>
-
-      <div id="audioWork" hidden>
-        <div class="panel reveal">
-          <div class="slider-row">
-            <label>Start</label>
-            <input type="range" id="audioStart" min="0" max="100" value="0" step="0.01">
-            <span id="audioStartLabel">0:00</span>
-          </div>
-          <div class="slider-row">
-            <label>End</label>
-            <input type="range" id="audioEnd" min="0" max="100" value="100" step="0.01">
-            <span id="audioEndLabel">0:00</span>
-          </div>
-          <div class="row">
-            <button class="btn" id="audioPreviewBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              Play trimmed range
-            </button>
-            <button class="btn primary" id="audioExportBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Export trimmed WAV
-            </button>
-          </div>
-          <div id="audioResult" class="mt-12"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SCREENSHOT & FORMAT CONVERTER -->
-    <section id="screenshot" class="tool-section">
-      <p class="eyebrow">Screenshot &amp; Format Converter Studio</p>
-
-      <div class="panel reveal">
-        <h2>Screenshot Capture &amp; Format Converter</h2>
-        <p class="hint" id="shotHintText">Capture your screen, upload any image format, or simply press <strong>Ctrl+V / Cmd+V</strong> anywhere on this page to paste an image directly from your clipboard!</p>
-        
-        <div class="row" id="shotButtonsRow">
-          <button class="btn primary" id="captureShotBtn">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-            Capture full screen
-          </button>
-          <button class="btn" id="captureAreaBtn">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3H3v3M18 3h3v3M6 21H3v-3M18 21h3v-3"/></svg>
-            Capture area
-          </button>
-          <input type="file" id="shotFileInput" accept="image/*" title="Upload Image File">
-          <button class="btn danger" id="removeShotBtn" hidden>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-            Remove Image
-          </button>
-        </div>
-
-        <div id="mobileShotFallback" class="mobile-fallback" hidden>
-          <p><strong>📱 Mobile Device Detected:</strong> Live screen capturing is restricted on mobile. Please take a screenshot using your phone buttons or choose an image below to convert and edit it!</p>
-          <div class="mt-4">
-            <input type="file" id="shotFileInputMobile" accept="image/*">
-          </div>
-        </div>
-      </div>
-
-      <p id="shotEmpty" class="empty">No image loaded yet. Upload, capture, or press <strong>Ctrl+V / Cmd+V</strong> to paste an image.</p>
-
-      <div id="shotAreaPicker" class="area-picker" hidden>
-        <p class="hint mb-12">Drag out the area you want to keep, then confirm.</p>
-        <div class="area-picker-stage">
-          <canvas id="areaPickCanvas"></canvas>
-        </div>
-        <div class="row mt-12">
-          <button class="btn primary" id="areaConfirmBtn">Use this area</button>
-          <button class="btn" id="areaCancelBtn">Cancel</button>
-        </div>
-      </div>
-
-      <div id="shotWork" hidden>
-        <div class="panel reveal">
-          <h3>Draw and annotate</h3>
-          <p class="hint">Pick a shape, then drag on the image below. Pick text, then click once to type a label at that spot.</p>
-          <div class="row">
-            <button class="btn" id="shotArrowBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              Arrow
-            </button>
-            <button class="btn" id="shotRectBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-              Box
-            </button>
-            <button class="btn" id="shotCircleBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/></svg>
-              Circle
-            </button>
-            <button class="btn" id="shotTextBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
-              Text
-            </button>
-            <button class="btn" id="shotBlurBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/></svg>
-              Blur
-            </button>
-            <button class="btn" id="shotCropBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2v14a2 2 0 0 0 2 2h14"/><path d="M18 22V8a2 2 0 0 0-2-2H2"/></svg>
-              Crop
-            </button>
-            <button class="btn" id="shotNoToolBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              Stop drawing
-            </button>
-          </div>
-          <div class="row mt-14" id="shotCropActions" hidden>
-            <button class="btn primary" id="shotApplyCropBtn">Apply crop</button>
-            <button class="btn" id="shotCancelCropBtn">Cancel crop</button>
-          </div>
-          <div class="row mt-14">
-            <span class="color-row" id="shotColorRow">
-              <button class="color-swatch active" data-color="#e35d5d" title="Red"></button>
-              <button class="color-swatch" data-color="#2563eb" title="Blue"></button>
-              <button class="color-swatch" data-color="#16a34a" title="Green"></button>
-              <button class="color-swatch" data-color="#f2a63f" title="Orange"></button>
-              <button class="color-swatch" data-color="#111318" title="Dark"></button>
+          <div id="liveTranscribeBox" class="live-teleprompter-box" hidden>
+            <span class="live-teleprompter-label">
+              <span class="rec-dot pulsing blue-dot"></span>
+              Live Voice Transcription (Teleprompter)
             </span>
-            <button class="btn" id="shotUndoBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>
-              Undo
-            </button>
-            <button class="btn danger" id="shotClearBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-              Clear annotations
-            </button>
+            <div id="liveTranscribeText" class="live-teleprompter-text">Listening for speech...</div>
+          </div>
+
+          <div id="mobileRecFallback" class="mobile-fallback" hidden>
+            <p><strong>📱 Mobile Device Detected:</strong> Live screen recording is restricted by mobile operating
+              systems (iOS and Android). Please use your phone's built-in screen recorder from your Control Center or
+              Quick Settings, then upload the video in the tool below to trim and edit it!</p>
+            <a href="#editor" class="btn primary">Go to Video Editor &darr;</a>
+          </div>
+
+          <div id="securityRecFallback" class="mobile-fallback warning-fallback" hidden>
+            <p><strong>🔒 Browser Security Notice:</strong> You are on a laptop/desktop, but your web browser has
+              blocked the screen recording API because you opened this file directly from your folder (via
+              <code>file://</code> protocol). To record your screen, please deploy this app to Vercel (which provides a
+              secure HTTPS domain) or run it via a local web server!</p>
+            <a href="#editor" class="btn primary warning-btn">Use Video Editor Instead &darr;</a>
           </div>
         </div>
 
-        <div class="panel reveal">
-          <h3>Extract Text from Image (Offline OCR)</h3>
-          <p class="hint">Extract text, code snippets, or error messages directly from your screenshot. Tip: To scan only a specific section, draw a <strong>Box</strong> around it above using the Draw tools, then click extract!</p>
+        <div class="panel reveal" id="recResultPanel" hidden>
+          <h3>Recording ready</h3>
           <div class="row">
-            <button class="btn primary" id="shotExtractTextBtn">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-              Scan &amp; Extract Text
+            <button class="btn primary" id="sendToEditorBtn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+              Open in editor
             </button>
-            <span id="ocrStatus" class="status"></span>
-          </div>
-          <textarea id="ocrResultText" class="pro-select ocr-textarea" placeholder="Extracted text will appear here after scanning..." readonly></textarea>
-          <div class="row mt-10">
-            <button class="btn" id="ocrCopyBtn" disabled>
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2-2v1"/></svg>
-              Copy to Clipboard
-            </button>
-          </div>
-        </div>
-
-        <div class="panel reveal">
-          <h3>Export &amp; Image Format Converter</h3>
-          <p class="hint">Convert your image to PNG, JPG, WEBP, or BMP, adjust compression quality, and download or copy directly to your clipboard!</p>
-          
-          <div class="pro-controls-grid">
-            <div class="pro-control-box">
-              <span class="pro-control-label">Target Format</span>
-              <select id="shotFormatSelect" class="pro-select">
-                <option value="image/png" selected>PNG (.png) — Lossless</option>
-                <option value="image/jpeg">JPG / JPEG (.jpg) — Small Size</option>
-                <option value="image/webp">WEBP (.webp) — Web Optimized</option>
-                <option value="image/bmp">BMP (.bmp) — Bitmap</option>
-              </select>
-            </div>
-
-            <div class="pro-control-box" id="shotQualityBox">
-              <span class="pro-control-label">Image Quality <span id="shotQualityLabel">92%</span></span>
-              <input type="range" id="shotQuality" min="0.1" max="1" value="0.92" step="0.05" class="mt-6">
-            </div>
-          </div>
-
-          <div class="stage mt-14">
-            <canvas id="shotCanvas"></canvas>
-            <div class="row">
-              <button class="btn" id="shotDownloadOriginalBtn">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Download Original
-              </button>
-              <button class="btn" id="shotCopyOriginalBtn">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2-2v1"/></svg>
-                Copy Original
-              </button>
-              <button class="btn primary" id="shotDownloadEditedBtn">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Download Converted
-              </button>
-              <button class="btn primary" id="shotCopyEditedBtn">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2-2v1"/></svg>
-                Copy Converted
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- COMBINE -->
-    <section id="combine" class="tool-section">
-      <p class="eyebrow">Combine videos and images</p>
-
-      <div class="panel reveal">
-        <h2>Combine Videos &amp; Images</h2>
-        <p class="hint">Add two or more video files below, reorder them with the arrows, then merge into a single video played back to back in that exact order.</p>
-        <div class="row">
-          <input type="file" id="combineVideoInput" accept="video/*" multiple>
-          <button class="btn danger" id="combineVideoClearBtn" hidden>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-            Clear All Videos
-          </button>
-        </div>
-        <div class="combine-list" id="combineVideoList"></div>
-        <div class="row mt-14">
-          <button class="btn primary" id="combineVideoExportBtn">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
-            Merge videos
-          </button>
-        </div>
-        <div class="progress-wrap" id="combineVideoProgressWrap"><div class="progress-bar" id="combineVideoProgressBar"></div></div>
-        <div id="combineVideoResult" class="mt-12"></div>
-      </div>
-
-      <div class="panel reveal">
-        <h3>Combine images</h3>
-        <p class="hint">Add two or more images, reorder them, then either merge them side by side into one image, or turn them into a slideshow video.</p>
-        <div class="row">
-          <input type="file" id="combineImageInput" accept="image/*" multiple>
-          <button class="btn danger" id="combineImageClearBtn" hidden>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-            Clear All Images
-          </button>
-        </div>
-        <div class="combine-list" id="combineImageList"></div>
-        <div class="slider-row mt-14">
-          <label>Per slide</label>
-          <input type="range" id="slideDuration" min="1" max="6" value="2" step="1">
-          <span id="slideDurationLabel">2s</span>
-        </div>
-        <div class="row">
-          <button class="btn" id="combineImageMergeBtn">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="3" x2="12" y2="21"/></svg>
-            Merge into one image
-          </button>
-          <button class="btn primary" id="combineImageSlideshowBtn">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            Create slideshow video
-          </button>
-        </div>
-        <div class="progress-wrap" id="combineImageProgressWrap"><div class="progress-bar" id="combineImageProgressBar"></div></div>
-        <div id="combineImageResult" class="mt-12"></div>
-      </div>
-    </section>
-
-    <!-- AUTHOR SECTION -->
-    <section id="author" class="tool-section">
-      <p class="eyebrow">About the Author &amp; Transparency</p>
-      <div class="panel reveal author-box">
-        <div class="author-header">
-          <div class="author-avatar">
-            <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </div>
-          <div>
-            <h2 class="m-0">Created &amp; Maintained by Screen Studio Team</h2>
-            <p class="hint mt-2">Open-Source Privacy Advocates &amp; Web Engineers</p>
-          </div>
-        </div>
-        <hr class="author-hr">
-        <p class="hint author-desc">
-          <strong>Screen Studio</strong> was engineered as a 100% client-side alternative to telemetry-heavy cloud screen recorders. Built using standard <a href="https://developer.mozilla.org/en-US/docs/Web/API/Media_Capture_and_Streams_API" target="_blank" rel="noopener noreferrer" class="accent-link">W3C Web APIs</a> (like `getDisplayMedia` and WebAudio), all processing happens in your browser. Our offline OCR technology is powered by the open-source <a href="https://github.com/naptha/tesseract.js" target="_blank" rel="noopener noreferrer" class="accent-link">Tesseract.js project</a>.
-        </p>
-        <div class="row">
-          <span class="badge-offline m-0">Verified Open Source Technology</span>
-          <span class="badge-offline badge-neutral m-0">Zero Tracking &bull; Zero Server Uploads</span>
-        </div>
-      </div>
-    </section>
-
-    <footer class="site-footer">
-      <div class="footer-top">
-        <div class="footer-brand">
-          <a class="brand" href="#top"><span class="brand-dot"></span>Screen Studio</a>
-          <p>A small set of tools for capturing, trimming and marking up your screen. Everything runs in this browser tab, nothing is ever uploaded.</p>
-          <div
-            data-codemarket-widget="nl_bc10ee1b846e4b48"
-            data-theme-bg="#ffffff"
-            data-theme-text="slate-600"
-            data-layout="grid"
-            data-show-branding="false"
-            style="margin-top: 16px;"
-          >
-            <a href="https://code.market?code.market=verified" title="ai tools code.market">
-              <img src="https://code.market/assets/manage-product/featured-logo-bright.svg" alt="ai tools code.market" />
+            <a class="link-btn" id="recDownloadLink" download="screen-recording.webm">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Download .webm
             </a>
           </div>
-          <a href="https://twelve.tools" target="_blank">
-            <img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools" width="200" height="54">
-          </a>
         </div>
-        <div class="footer-col">
-          <p class="footer-heading">Tools</p>
-          <a href="#record">Screen recorder</a>
-          <a href="#editor">Trim, mark &amp; blur</a>
-          <a href="#audio">Audio trimmer</a>
-          <a href="#screenshot">Screenshot &amp; annotate</a>
-          <a href="#combine">Combine videos &amp; images</a>
-        </div>
-        <div class="footer-col">
-          <p class="footer-heading">Good to know</p>
-          <span>No sign-up, ever</span>
-          <span>No files leave this device</span>
-          <span>Works with no internet</span>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>Built to work offline, in your browser, always free.</span>
-        <span>Last updated: <time datetime="2026-08-02">August 2026</time></span>
-        <span>&copy; <span id="copyrightYear"></span> Screen Studio. All rights reserved.</span>
-        <span id="visitCounter" class="visit-counter"></span>
-      </div>
-    </footer>
+      </section>
 
+      <!-- EDITOR -->
+      <section id="editor" class="tool-section">
+        <p class="eyebrow">Trim, mark and blur</p>
+
+        <div class="panel reveal">
+          <h2>Video Editor &amp; Trimmer</h2>
+          <p class="hint">Use a fresh recording, upload any video file from your device, or reload a saved `.json`
+            project file to restore your previous timeline, blur boxes, and subtitles.</p>
+          <div class="row">
+            <input type="file" id="videoFileInput" accept="video/*" title="Load Video">
+            <button class="btn" id="loadProjectBtn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>
+              Resume Project (.json)
+            </button>
+            <input type="file" id="projectFileInput" accept=".json" hidden>
+
+            <button class="btn danger" id="removeVideoBtn" hidden>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              </svg>
+              Remove Video
+            </button>
+          </div>
+        </div>
+
+        <p id="editorEmpty" class="empty">No video loaded yet.</p>
+
+        <div id="editorWork" hidden>
+          <div class="panel reveal">
+            <h3>Timeline &amp; Shortcuts <span class="shortcut-badge">Space: Play/Pause | &larr;/&rarr;: Step
+                Frame</span></h3>
+            <div class="slider-row">
+              <label>Start</label>
+              <input type="range" id="trimStart" min="0" max="100" value="0" step="0.01">
+              <span id="trimStartLabel">0:00</span>
+            </div>
+            <div class="slider-row">
+              <label>End</label>
+              <input type="range" id="trimEnd" min="0" max="100" value="100" step="0.01">
+              <span id="trimEndLabel">0:00</span>
+            </div>
+            <div class="slider-row">
+              <label>Preview</label>
+              <input type="range" id="scrub" min="0" max="100" value="0" step="0.01">
+              <span id="scrubLabel">0:00</span>
+            </div>
+          </div>
+
+          <div class="panel reveal">
+            <h3>Mark and blur areas <span class="shortcut-badge">M: Mark | B: Blur | Z: Undo</span></h3>
+            <p class="hint">Pick a tool, then drag on the preview to draw a box. You can set individual Start and End
+              times for each box below so it appears only during specific timestamps.</p>
+            <div class="row">
+              <button class="btn" id="markToolBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                </svg>
+                Mark box
+              </button>
+              <button class="btn" id="blurToolBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="9" stroke-dasharray="3 3" />
+                </svg>
+                Blur box
+              </button>
+              <button class="btn" id="noToolBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+                Stop drawing
+              </button>
+              <button class="btn" id="undoRegionBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 14L4 9l5-5" />
+                  <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11" />
+                </svg>
+                Undo last box
+              </button>
+            </div>
+            <div class="region-list" id="regionList"></div>
+          </div>
+
+          <div class="panel reveal">
+            <h3>Subtitles &amp; Captions Studio</h3>
+            <p class="hint">Import an existing `.srt` or `.vtt` file, edit cues manually below, export standard subtitle
+              files, or burn styled caption text right onto your video during export!</p>
+            <div class="row">
+              <input type="file" id="subtitleFileInput" accept=".srt,.vtt" title="Load .srt / .vtt File">
+              <button class="btn" id="addCaptionBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                Add Caption Cue
+              </button>
+              <button class="btn primary" id="exportSrtBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Download .srt File
+              </button>
+              <button class="btn danger" id="clearCaptionsBtn" hidden>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+                Clear Captions
+              </button>
+            </div>
+            <div class="caption-list" id="captionList"></div>
+          </div>
+
+          <div class="panel reveal">
+            <h3>Pro Export Settings</h3>
+
+            <div class="pro-controls-grid">
+              <div class="pro-control-box">
+                <span class="pro-control-label">Playback Speed</span>
+                <select id="exportSpeedSelect" class="pro-select">
+                  <option value="0.5">0.5x (Slow Motion)</option>
+                  <option value="1" selected>1.0x (Normal Speed)</option>
+                  <option value="1.5">1.5x (Fast Speed)</option>
+                  <option value="2">2.0x (Time-Lapse)</option>
+                  <option value="4">4.0x (Super Time-Lapse)</option>
+                </select>
+              </div>
+
+              <div class="pro-control-box">
+                <span class="pro-control-label">Custom Watermark / Logo</span>
+                <input type="file" id="watermarkInput" accept="image/*" class="pro-select file-select-sm">
+              </div>
+
+              <div class="pro-control-box">
+                <span class="pro-control-label">Watermark Position</span>
+                <select id="watermarkPosSelect" class="pro-select">
+                  <option value="top-left">Top Left</option>
+                  <option value="top-right">Top Right</option>
+                  <option value="bottom-left">Bottom Left</option>
+                  <option value="bottom-right" selected>Bottom Right</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="audio-options-row export-audio-row">
+              <label class="audio-toggle-card">
+                <input type="checkbox" id="exportBurnCaptions" checked>
+                <div class="audio-toggle-text">
+                  <span class="audio-toggle-title">Burn Captions into Video</span>
+                  <span class="audio-toggle-desc">When checked, active subtitles are drawn onto the canvas and baked
+                    permanently into your exported WebM file!</span>
+                </div>
+              </label>
+
+              <label class="audio-toggle-card">
+                <input type="checkbox" id="exportRemoveAudio">
+                <div class="audio-toggle-text">
+                  <span class="audio-toggle-title">Remove Audio (Mute Video)</span>
+                  <span class="audio-toggle-desc">Check this box to strip all background sound and download your edited
+                    video without any audio.</span>
+                </div>
+              </label>
+            </div>
+
+            <div class="stage">
+              <div class="readout">
+                <span id="readoutTime">00:00 / 00:00</span>
+                <span id="readoutRes"></span>
+              </div>
+              <video class="hidden-source" id="sourceVideo" playsinline muted></video>
+              <canvas id="editCanvas"></canvas>
+              <div class="row">
+                <button class="btn primary" id="exportBtn">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  Export final video
+                </button>
+                <button class="btn" id="saveProjectBtn">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 21H5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 21 17 13 7 13 7 21" />
+                    <polyline points="7 3 7 8 15 8" />
+                  </svg>
+                  Save Project File (.json)
+                </button>
+              </div>
+              <div class="progress-wrap" id="exportProgressWrap">
+                <div class="progress-bar" id="exportProgressBar"></div>
+              </div>
+              <div id="exportResult"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AUDIO -->
+      <section id="audio" class="tool-section">
+        <p class="eyebrow">Audio trimmer</p>
+        <div class="panel reveal">
+          <h2>Free Audio Trimmer</h2>
+          <p class="hint">Loads an audio file, lets you pick a start and end point, exports that section as a WAV file.
+          </p>
+          <div class="row">
+            <input type="file" id="audioFileInput" accept="audio/*">
+            <button class="btn danger" id="removeAudioBtn" hidden>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              </svg>
+              Remove Audio
+            </button>
+          </div>
+        </div>
+
+        <p id="audioEmpty" class="empty">No audio loaded yet.</p>
+
+        <div id="audioWork" hidden>
+          <div class="panel reveal">
+            <div class="slider-row">
+              <label>Start</label>
+              <input type="range" id="audioStart" min="0" max="100" value="0" step="0.01">
+              <span id="audioStartLabel">0:00</span>
+            </div>
+            <div class="slider-row">
+              <label>End</label>
+              <input type="range" id="audioEnd" min="0" max="100" value="100" step="0.01">
+              <span id="audioEndLabel">0:00</span>
+            </div>
+            <div class="row">
+              <button class="btn" id="audioPreviewBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3" />
+                </svg>
+                Play trimmed range
+              </button>
+              <button class="btn primary" id="audioExportBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Export trimmed WAV
+              </button>
+            </div>
+            <div id="audioResult" class="mt-12"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREENSHOT & FORMAT CONVERTER -->
+      <section id="screenshot" class="tool-section">
+        <p class="eyebrow">Screenshot &amp; Format Converter Studio</p>
+
+        <div class="panel reveal">
+          <h2>Screenshot Capture &amp; Format Converter</h2>
+          <p class="hint" id="shotHintText">Capture your screen, upload any image format, or simply press <strong>Ctrl+V
+              / Cmd+V</strong> anywhere on this page to paste an image directly from your clipboard!</p>
+
+          <div class="row" id="shotButtonsRow">
+            <button class="btn primary" id="captureShotBtn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
+              Capture full screen
+            </button>
+            <button class="btn" id="captureAreaBtn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 3H3v3M18 3h3v3M6 21H3v-3M18 21h3v-3" />
+              </svg>
+              Capture area
+            </button>
+            <input type="file" id="shotFileInput" accept="image/*" title="Upload Image File">
+            <button class="btn danger" id="removeShotBtn" hidden>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              </svg>
+              Remove Image
+            </button>
+          </div>
+
+          <div id="mobileShotFallback" class="mobile-fallback" hidden>
+            <p><strong>📱 Mobile Device Detected:</strong> Live screen capturing is restricted on mobile. Please take a
+              screenshot using your phone buttons or choose an image below to convert and edit it!</p>
+            <div class="mt-4">
+              <input type="file" id="shotFileInputMobile" accept="image/*">
+            </div>
+          </div>
+        </div>
+
+        <p id="shotEmpty" class="empty">No image loaded yet. Upload, capture, or press <strong>Ctrl+V / Cmd+V</strong>
+          to paste an image.</p>
+
+        <div id="shotAreaPicker" class="area-picker" hidden>
+          <p class="hint mb-12">Drag out the area you want to keep, then confirm.</p>
+          <div class="area-picker-stage">
+            <canvas id="areaPickCanvas"></canvas>
+          </div>
+          <div class="row mt-12">
+            <button class="btn primary" id="areaConfirmBtn">Use this area</button>
+            <button class="btn" id="areaCancelBtn">Cancel</button>
+          </div>
+        </div>
+
+        <div id="shotWork" hidden>
+          <div class="panel reveal">
+            <h3>Draw and annotate</h3>
+            <p class="hint">Pick a shape, then drag on the image below. Pick text, then click once to type a label at
+              that spot.</p>
+            <div class="row">
+              <button class="btn" id="shotArrowBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+                Arrow
+              </button>
+              <button class="btn" id="shotRectBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                </svg>
+                Box
+              </button>
+              <button class="btn" id="shotCircleBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="9" />
+                </svg>
+                Circle
+              </button>
+              <button class="btn" id="shotTextBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="4 7 4 4 20 4 20 7" />
+                  <line x1="9" y1="20" x2="15" y2="20" />
+                  <line x1="12" y1="4" x2="12" y2="20" />
+                </svg>
+                Text
+              </button>
+              <button class="btn" id="shotBlurBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="9" stroke-dasharray="3 3" />
+                </svg>
+                Blur
+              </button>
+              <button class="btn" id="shotCropBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 2v14a2 2 0 0 0 2 2h14" />
+                  <path d="M18 22V8a2 2 0 0 0-2-2H2" />
+                </svg>
+                Crop
+              </button>
+              <button class="btn" id="shotNoToolBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+                Stop drawing
+              </button>
+            </div>
+            <div class="row mt-14" id="shotCropActions" hidden>
+              <button class="btn primary" id="shotApplyCropBtn">Apply crop</button>
+              <button class="btn" id="shotCancelCropBtn">Cancel crop</button>
+            </div>
+            <div class="row mt-14">
+              <span class="color-row" id="shotColorRow">
+                <button class="color-swatch active" data-color="#e35d5d" title="Red"></button>
+                <button class="color-swatch" data-color="#2563eb" title="Blue"></button>
+                <button class="color-swatch" data-color="#16a34a" title="Green"></button>
+                <button class="color-swatch" data-color="#f2a63f" title="Orange"></button>
+                <button class="color-swatch" data-color="#111318" title="Dark"></button>
+              </span>
+              <button class="btn" id="shotUndoBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 14L4 9l5-5" />
+                  <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11" />
+                </svg>
+                Undo
+              </button>
+              <button class="btn danger" id="shotClearBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                </svg>
+                Clear annotations
+              </button>
+            </div>
+          </div>
+
+          <div class="panel reveal">
+            <h3>Extract Text from Image (Offline OCR)</h3>
+            <p class="hint">Extract text, code snippets, or error messages directly from your screenshot. Tip: To scan
+              only a specific section, draw a <strong>Box</strong> around it above using the Draw tools, then click
+              extract!</p>
+            <div class="row">
+              <button class="btn primary" id="shotExtractTextBtn">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                  <polyline points="10 9 9 9 8 9" />
+                </svg>
+                Scan &amp; Extract Text
+              </button>
+              <span id="ocrStatus" class="status"></span>
+            </div>
+            <textarea id="ocrResultText" class="pro-select ocr-textarea"
+              placeholder="Extracted text will appear here after scanning..." readonly></textarea>
+            <div class="row mt-10">
+              <button class="btn" id="ocrCopyBtn" disabled>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2-2v1" />
+                </svg>
+                Copy to Clipboard
+              </button>
+            </div>
+          </div>
+
+          <div class="panel reveal">
+            <h3>Export &amp; Image Format Converter</h3>
+            <p class="hint">Convert your image to PNG, JPG, WEBP, or BMP, adjust compression quality, and download or
+              copy directly to your clipboard!</p>
+
+            <div class="pro-controls-grid">
+              <div class="pro-control-box">
+                <span class="pro-control-label">Target Format</span>
+                <select id="shotFormatSelect" class="pro-select">
+                  <option value="image/png" selected>PNG (.png) — Lossless</option>
+                  <option value="image/jpeg">JPG / JPEG (.jpg) — Small Size</option>
+                  <option value="image/webp">WEBP (.webp) — Web Optimized</option>
+                  <option value="image/bmp">BMP (.bmp) — Bitmap</option>
+                </select>
+              </div>
+
+              <div class="pro-control-box" id="shotQualityBox">
+                <span class="pro-control-label">Image Quality <span id="shotQualityLabel">92%</span></span>
+                <input type="range" id="shotQuality" min="0.1" max="1" value="0.92" step="0.05" class="mt-6">
+              </div>
+            </div>
+
+            <div class="stage mt-14">
+              <canvas id="shotCanvas"></canvas>
+              <div class="row">
+                <button class="btn" id="shotDownloadOriginalBtn">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  Download Original
+                </button>
+                <button class="btn" id="shotCopyOriginalBtn">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2-2v1" />
+                  </svg>
+                  Copy Original
+                </button>
+                <button class="btn primary" id="shotDownloadEditedBtn">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
+                  Download Converted
+                </button>
+                <button class="btn primary" id="shotCopyEditedBtn">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2-2v1" />
+                  </svg>
+                  Copy Converted
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- COMBINE -->
+      <section id="combine" class="tool-section">
+        <p class="eyebrow">Combine videos and images</p>
+
+        <div class="panel reveal">
+          <h2>Combine Videos &amp; Images</h2>
+          <p class="hint">Add two or more video files below, reorder them with the arrows, then merge into a single
+            video played back to back in that exact order.</p>
+          <div class="row">
+            <input type="file" id="combineVideoInput" accept="video/*" multiple>
+            <button class="btn danger" id="combineVideoClearBtn" hidden>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              </svg>
+              Clear All Videos
+            </button>
+          </div>
+          <div class="combine-list" id="combineVideoList"></div>
+          <div class="row mt-14">
+            <button class="btn primary" id="combineVideoExportBtn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+              </svg>
+              Merge videos
+            </button>
+          </div>
+          <div class="progress-wrap" id="combineVideoProgressWrap">
+            <div class="progress-bar" id="combineVideoProgressBar"></div>
+          </div>
+          <div id="combineVideoResult" class="mt-12"></div>
+        </div>
+
+        <div class="panel reveal">
+          <h3>Combine images</h3>
+          <p class="hint">Add two or more images, reorder them, then either merge them side by side into one image, or
+            turn them into a slideshow video.</p>
+          <div class="row">
+            <input type="file" id="combineImageInput" accept="image/*" multiple>
+            <button class="btn danger" id="combineImageClearBtn" hidden>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              </svg>
+              Clear All Images
+            </button>
+          </div>
+          <div class="combine-list" id="combineImageList"></div>
+          <div class="slider-row mt-14">
+            <label>Per slide</label>
+            <input type="range" id="slideDuration" min="1" max="6" value="2" step="1">
+            <span id="slideDurationLabel">2s</span>
+          </div>
+          <div class="row">
+            <button class="btn" id="combineImageMergeBtn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <line x1="12" y1="3" x2="12" y2="21" />
+              </svg>
+              Merge into one image
+            </button>
+            <button class="btn primary" id="combineImageSlideshowBtn">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
+              Create slideshow video
+            </button>
+          </div>
+          <div class="progress-wrap" id="combineImageProgressWrap">
+            <div class="progress-bar" id="combineImageProgressBar"></div>
+          </div>
+          <div id="combineImageResult" class="mt-12"></div>
+        </div>
+      </section>
+
+      <!-- AUTHOR SECTION -->
+      <section id="author" class="tool-section">
+        <p class="eyebrow">About the Author &amp; Transparency</p>
+        <div class="panel reveal author-box">
+          <div class="author-header">
+            <div class="author-avatar">
+              <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+            </div>
+            <div>
+              <h2 class="m-0">Created &amp; Maintained by Screen Studio Team</h2>
+              <p class="hint mt-2">Open-Source Privacy Advocates &amp; Web Engineers</p>
+            </div>
+          </div>
+          <hr class="author-hr">
+          <p class="hint author-desc">
+            <strong>Screen Studio</strong> was engineered as a 100% client-side alternative to telemetry-heavy cloud
+            screen recorders. Built using standard <a
+              href="https://developer.mozilla.org/en-US/docs/Web/API/Media_Capture_and_Streams_API" target="_blank"
+              rel="noopener noreferrer" class="accent-link">W3C Web APIs</a> (like `getDisplayMedia` and WebAudio), all
+            processing happens in your browser. Our offline OCR technology is powered by the open-source <a
+              href="https://github.com/naptha/tesseract.js" target="_blank" rel="noopener noreferrer"
+              class="accent-link">Tesseract.js project</a>.
+          </p>
+          <div class="row">
+            <span class="badge-offline m-0">Verified Open Source Technology</span>
+            <span class="badge-offline badge-neutral m-0">Zero Tracking &bull; Zero Server Uploads</span>
+          </div>
+        </div>
+      </section>
+
+      <footer class="site-footer">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <a class="brand" href="#top"><span class="brand-dot"></span>Screen Studio</a>
+            <p>A small set of tools for capturing, trimming and marking up your screen. Everything runs in this browser
+              tab, nothing is ever uploaded.</p>
+            <div data-codemarket-widget="nl_bc10ee1b846e4b48" data-theme-bg="#ffffff" data-theme-text="slate-600"
+              data-layout="grid" data-show-branding="false" style="margin-top: 16px;">
+              <a href="https://code.market?code.market=verified" title="ai tools code.market">
+                <img src="https://code.market/assets/manage-product/featured-logo-bright.svg"
+                  alt="ai tools code.market" />
+              </a>
+            </div>
+            <a href="https://twelve.tools" target="_blank">
+              <img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools" width="200" height="54">
+            </a>
+            <a href="https://tools.launchllama.co?utm_source=badge&utm_medium=referral" target="_blank"
+              rel="noopener noreferrer">
+              <img src="https://tools.launchllama.co/featured-badge.png?v=2" alt="As seen on Launch Llama Newsletter"
+                width="200" height="50" />
+            </a>
+          </div>
+          <div class="footer-col">
+            <p class="footer-heading">Tools</p>
+            <a href="#record">Screen recorder</a>
+            <a href="#editor">Trim, mark &amp; blur</a>
+            <a href="#audio">Audio trimmer</a>
+            <a href="#screenshot">Screenshot &amp; annotate</a>
+            <a href="#combine">Combine videos &amp; images</a>
+          </div>
+          <div class="footer-col">
+            <p class="footer-heading">Good to know</p>
+            <span>No sign-up, ever</span>
+            <span>No files leave this device</span>
+            <span>Works with no internet</span>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>Built to work offline, in your browser, always free.</span>
+          <span>Last updated: <time datetime="2026-08-02">August 2026</time></span>
+          <span>&copy; <span id="copyrightYear"></span> Screen Studio. All rights reserved.</span>
+          <span id="visitCounter" class="visit-counter"></span>
+        </div>
+      </footer>
+
+    </div>
   </div>
-</div>
 
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
+
 </html>
