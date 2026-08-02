@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://screen-studio-seven.vercel.app/sitemap.xml

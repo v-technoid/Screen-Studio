@@ -147,6 +147,12 @@
     }
   }
 
+  // ---------- auto-updating copyright year ----------
+  var copyrightYearEl = document.getElementById('copyrightYear');
+  if(copyrightYearEl){
+    copyrightYearEl.textContent = new Date().getFullYear();
+  }
+
   // ================= RECORD TAB =================
   var mediaRecorder, recordedChunks = [], recordedBlobUrl = null;
   var startRecBtn = document.getElementById('startRecBtn');
