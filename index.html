@@ -4,31 +4,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Technical SEO & Meta Description -->
-<title>Free Online &amp; Offline Screen Recorder (No Watermark, No Sign-Up) — Screen Studio</title>
-<meta name="description" content="100% free online and offline screen recorder with no watermark and no sign-up. Capture screen, webcam, system audio, and mic directly in your browser. Files never leave your device.">
+<title>Free Online &amp; Offline Screen Recorder | Screen Studio</title>
+<meta name="description" content="Free online screen recorder with no watermark. Capture your screen, webcam, and audio offline right in the browser. No sign-up required.">
+
 <link rel="canonical" href="https://screen-studio-seven.vercel.app/">
+<link rel="alternate" hreflang="en" href="https://screen-studio-seven.vercel.app/">
+<link rel="alternate" hreflang="x-default" href="https://screen-studio-seven.vercel.app/">
 <meta name="keywords" content="free screen recorder online, offline screen recorder no watermark, screen recorder no signup, browser screen recorder, private screen recorder">
 
-<!-- Open Graph / Social Media Meta -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://screen-studio-seven.vercel.app/">
-<meta property="og:title" content="Free Online &amp; Offline Screen Recorder (No Watermark, No Sign-Up)">
-<meta property="og:description" content="Record screen, webcam, and audio for free in your browser. No watermark, no sign-up, works offline, and files never leave your device.">
+<meta property="og:title" content="Free Online &amp; Offline Screen Recorder | Screen Studio">
+<meta property="og:description" content="Free online screen recorder with no watermark. Capture your screen, webcam, and audio offline right in the browser. No sign-up required.">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%232563eb'/%3E%3Ccircle cx='16' cy='16' r='6' fill='white'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="styles.css">
-<!-- Tesseract.js Offline OCR Library -->
+
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
-<!-- Structured Data / JSON-LD Schema -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "Screen Studio",
   "url": "https://screen-studio-seven.vercel.app/",
-  "description": "100% free online and offline screen recorder with no watermark. Capture screen, webcam, system audio, and mic directly in your browser.",
+  "description": "Free online screen recorder with no watermark. Capture your screen, webcam, and audio offline right in the browser. No sign-up required.",
   "applicationCategory": "MultimediaApplication",
   "operatingSystem": "All",
   "offers": {
@@ -123,7 +123,6 @@
         <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Zero Server Uploads</li>
       </ul>
 
-      <!-- Proof Points Banner for Search Audit -->
       <div class="proof-points-card">
         <div class="proof-item">
           <span class="proof-icon">🌐</span>
@@ -143,7 +142,7 @@
     </section>
 
     <section class="tool-grid-section">
-      <p class="eyebrow-center">Pick a tool</p>
+      <h2 class="eyebrow-center">Browser-Based Screen Recording Tools</h2>
       <div class="tool-grid">
         <a class="tool-card reveal" href="#record">
           <span class="tool-icon rec"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg></span>
@@ -177,7 +176,7 @@
     <section id="record" class="tool-section">
       <p class="eyebrow">Free Online Screen recorder</p>
       <div class="panel reveal">
-        <h2>Record screen, webcam &amp; audio (No Watermark)</h2>
+        <h2>Offline Screen Recorder (No Watermark)</h2>
         <p class="hint" id="recHintText">Select your inputs below before starting. You can include a live webcam bubble overlay (PiP), system meeting audio, your external microphone, and live voice teleprompter subtitles!</p>
         
         <div class="audio-options-row" id="recAudioOptions">
@@ -226,10 +225,9 @@
           <span id="recStatus" class="status"></span>
         </div>
 
-        <!-- Real-Time On-Screen Teleprompter Box -->
         <div id="liveTranscribeBox" class="live-teleprompter-box" hidden>
           <span class="live-teleprompter-label">
-            <span class="rec-dot pulsing" style="background:#2563eb;"></span>
+            <span class="rec-dot pulsing blue-dot"></span>
             Live Voice Transcription (Teleprompter)
           </span>
           <div id="liveTranscribeText" class="live-teleprompter-text">Listening for speech...</div>
@@ -240,14 +238,14 @@
           <a href="#editor" class="btn primary">Go to Video Editor &darr;</a>
         </div>
 
-        <div id="securityRecFallback" class="mobile-fallback" style="border-color: #d97706; background: rgba(217, 119, 6, 0.05);" hidden>
+        <div id="securityRecFallback" class="mobile-fallback warning-fallback" hidden>
           <p><strong>🔒 Browser Security Notice:</strong> You are on a laptop/desktop, but your web browser has blocked the screen recording API because you opened this file directly from your folder (via <code>file://</code> protocol). To record your screen, please deploy this app to Vercel (which provides a secure HTTPS domain) or run it via a local web server!</p>
-          <a href="#editor" class="btn primary" style="background: #d97706; border-color: #d97706;">Use Video Editor Instead &darr;</a>
+          <a href="#editor" class="btn primary warning-btn">Use Video Editor Instead &darr;</a>
         </div>
       </div>
 
       <div class="panel reveal" id="recResultPanel" hidden>
-        <h2>Recording ready</h2>
+        <h3>Recording ready</h3>
         <div class="row">
           <button class="btn primary" id="sendToEditorBtn">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
@@ -266,7 +264,7 @@
       <p class="eyebrow">Trim, mark and blur</p>
 
       <div class="panel reveal">
-        <h2>Load a video or saved project</h2>
+        <h2>Video Editor &amp; Trimmer</h2>
         <p class="hint">Use a fresh recording, upload any video file from your device, or reload a saved `.json` project file to restore your previous timeline, blur boxes, and subtitles.</p>
         <div class="row">
           <input type="file" id="videoFileInput" accept="video/*" title="Load Video">
@@ -287,7 +285,7 @@
 
       <div id="editorWork" hidden>
         <div class="panel reveal">
-          <h2>Timeline &amp; Shortcuts <span class="shortcut-badge">Space: Play/Pause | &larr;/&rarr;: Step Frame</span></h2>
+          <h3>Timeline &amp; Shortcuts <span class="shortcut-badge">Space: Play/Pause | &larr;/&rarr;: Step Frame</span></h3>
           <div class="slider-row">
             <label>Start</label>
             <input type="range" id="trimStart" min="0" max="100" value="0" step="0.01">
@@ -306,7 +304,7 @@
         </div>
 
         <div class="panel reveal">
-          <h2>Mark and blur areas <span class="shortcut-badge">M: Mark | B: Blur | Z: Undo</span></h2>
+          <h3>Mark and blur areas <span class="shortcut-badge">M: Mark | B: Blur | Z: Undo</span></h3>
           <p class="hint">Pick a tool, then drag on the preview to draw a box. You can set individual Start and End times for each box below so it appears only during specific timestamps.</p>
           <div class="row">
             <button class="btn" id="markToolBtn">
@@ -330,7 +328,7 @@
         </div>
 
         <div class="panel reveal">
-          <h2>Subtitles &amp; Captions Studio</h2>
+          <h3>Subtitles &amp; Captions Studio</h3>
           <p class="hint">Import an existing `.srt` or `.vtt` file, edit cues manually below, export standard subtitle files, or burn styled caption text right onto your video during export!</p>
           <div class="row">
             <input type="file" id="subtitleFileInput" accept=".srt,.vtt" title="Load .srt / .vtt File">
@@ -351,7 +349,7 @@
         </div>
 
         <div class="panel reveal">
-          <h2>Pro Export Settings</h2>
+          <h3>Pro Export Settings</h3>
           
           <div class="pro-controls-grid">
             <div class="pro-control-box">
@@ -367,7 +365,7 @@
 
             <div class="pro-control-box">
               <span class="pro-control-label">Custom Watermark / Logo</span>
-              <input type="file" id="watermarkInput" accept="image/*" class="pro-select" style="padding: 4px;">
+              <input type="file" id="watermarkInput" accept="image/*" class="pro-select file-select-sm">
             </div>
 
             <div class="pro-control-box">
@@ -381,7 +379,7 @@
             </div>
           </div>
 
-          <div class="audio-options-row" style="margin: 8px 0 18px; width: 100%;">
+          <div class="audio-options-row export-audio-row">
             <label class="audio-toggle-card">
               <input type="checkbox" id="exportBurnCaptions" checked>
               <div class="audio-toggle-text">
@@ -412,7 +410,7 @@
                 Export final video
               </button>
               <button class="btn" id="saveProjectBtn">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
                 Save Project File (.json)
               </button>
             </div>
@@ -427,7 +425,7 @@
     <section id="audio" class="tool-section">
       <p class="eyebrow">Audio trimmer</p>
       <div class="panel reveal">
-        <h2>Trim an audio file</h2>
+        <h2>Free Audio Trimmer</h2>
         <p class="hint">Loads an audio file, lets you pick a start and end point, exports that section as a WAV file.</p>
         <div class="row">
           <input type="file" id="audioFileInput" accept="audio/*">
@@ -462,7 +460,7 @@
               Export trimmed WAV
             </button>
           </div>
-          <div id="audioResult" style="margin-top:12px;"></div>
+          <div id="audioResult" class="mt-12"></div>
         </div>
       </div>
     </section>
@@ -472,7 +470,7 @@
       <p class="eyebrow">Screenshot &amp; Format Converter Studio</p>
 
       <div class="panel reveal">
-        <h2>Capture, Paste, or Upload Image</h2>
+        <h2>Screenshot Capture &amp; Format Converter</h2>
         <p class="hint" id="shotHintText">Capture your screen, upload any image format, or simply press <strong>Ctrl+V / Cmd+V</strong> anywhere on this page to paste an image directly from your clipboard!</p>
         
         <div class="row" id="shotButtonsRow">
@@ -493,7 +491,7 @@
 
         <div id="mobileShotFallback" class="mobile-fallback" hidden>
           <p><strong>📱 Mobile Device Detected:</strong> Live screen capturing is restricted on mobile. Please take a screenshot using your phone buttons or choose an image below to convert and edit it!</p>
-          <div style="margin-top: 4px;">
+          <div class="mt-4">
             <input type="file" id="shotFileInputMobile" accept="image/*">
           </div>
         </div>
@@ -502,11 +500,11 @@
       <p id="shotEmpty" class="empty">No image loaded yet. Upload, capture, or press <strong>Ctrl+V / Cmd+V</strong> to paste an image.</p>
 
       <div id="shotAreaPicker" class="area-picker" hidden>
-        <p class="hint" style="margin:0 0 12px;">Drag out the area you want to keep, then confirm.</p>
+        <p class="hint mb-12">Drag out the area you want to keep, then confirm.</p>
         <div class="area-picker-stage">
           <canvas id="areaPickCanvas"></canvas>
         </div>
-        <div class="row" style="margin-top:12px;">
+        <div class="row mt-12">
           <button class="btn primary" id="areaConfirmBtn">Use this area</button>
           <button class="btn" id="areaCancelBtn">Cancel</button>
         </div>
@@ -514,7 +512,7 @@
 
       <div id="shotWork" hidden>
         <div class="panel reveal">
-          <h2>Draw and annotate</h2>
+          <h3>Draw and annotate</h3>
           <p class="hint">Pick a shape, then drag on the image below. Pick text, then click once to type a label at that spot.</p>
           <div class="row">
             <button class="btn" id="shotArrowBtn">
@@ -546,17 +544,17 @@
               Stop drawing
             </button>
           </div>
-          <div class="row" style="margin-top:14px;" id="shotCropActions" hidden>
+          <div class="row mt-14" id="shotCropActions" hidden>
             <button class="btn primary" id="shotApplyCropBtn">Apply crop</button>
             <button class="btn" id="shotCancelCropBtn">Cancel crop</button>
           </div>
-          <div class="row" style="margin-top:14px;">
+          <div class="row mt-14">
             <span class="color-row" id="shotColorRow">
-              <button class="color-swatch active" data-color="#e35d5d" style="background:#e35d5d" title="Red"></button>
-              <button class="color-swatch" data-color="#2563eb" style="background:#2563eb" title="Blue"></button>
-              <button class="color-swatch" data-color="#16a34a" style="background:#16a34a" title="Green"></button>
-              <button class="color-swatch" data-color="#f2a63f" style="background:#f2a63f" title="Orange"></button>
-              <button class="color-swatch" data-color="#111318" style="background:#111318" title="Dark"></button>
+              <button class="color-swatch active" data-color="#e35d5d" title="Red"></button>
+              <button class="color-swatch" data-color="#2563eb" title="Blue"></button>
+              <button class="color-swatch" data-color="#16a34a" title="Green"></button>
+              <button class="color-swatch" data-color="#f2a63f" title="Orange"></button>
+              <button class="color-swatch" data-color="#111318" title="Dark"></button>
             </span>
             <button class="btn" id="shotUndoBtn">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>
@@ -570,7 +568,7 @@
         </div>
 
         <div class="panel reveal">
-          <h2>Extract Text from Image (Offline OCR)</h2>
+          <h3>Extract Text from Image (Offline OCR)</h3>
           <p class="hint">Extract text, code snippets, or error messages directly from your screenshot. Tip: To scan only a specific section, draw a <strong>Box</strong> around it above using the Draw tools, then click extract!</p>
           <div class="row">
             <button class="btn primary" id="shotExtractTextBtn">
@@ -579,8 +577,8 @@
             </button>
             <span id="ocrStatus" class="status"></span>
           </div>
-          <textarea id="ocrResultText" class="pro-select" style="width:100%; height:110px; font-family:monospace; margin-top:14px; resize:vertical;" placeholder="Extracted text will appear here after scanning..." readonly></textarea>
-          <div class="row" style="margin-top:10px;">
+          <textarea id="ocrResultText" class="pro-select ocr-textarea" placeholder="Extracted text will appear here after scanning..." readonly></textarea>
+          <div class="row mt-10">
             <button class="btn" id="ocrCopyBtn" disabled>
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2-2v1"/></svg>
               Copy to Clipboard
@@ -588,9 +586,8 @@
           </div>
         </div>
 
-        <!-- Format Conversion & Export Controls -->
         <div class="panel reveal">
-          <h2>Export &amp; Image Format Converter</h2>
+          <h3>Export &amp; Image Format Converter</h3>
           <p class="hint">Convert your image to PNG, JPG, WEBP, or BMP, adjust compression quality, and download or copy directly to your clipboard!</p>
           
           <div class="pro-controls-grid">
@@ -606,11 +603,11 @@
 
             <div class="pro-control-box" id="shotQualityBox">
               <span class="pro-control-label">Image Quality <span id="shotQualityLabel">92%</span></span>
-              <input type="range" id="shotQuality" min="0.1" max="1" value="0.92" step="0.05" style="margin-top: 6px;">
+              <input type="range" id="shotQuality" min="0.1" max="1" value="0.92" step="0.05" class="mt-6">
             </div>
           </div>
 
-          <div class="stage" style="margin-top: 14px;">
+          <div class="stage mt-14">
             <canvas id="shotCanvas"></canvas>
             <div class="row">
               <button class="btn" id="shotDownloadOriginalBtn">
@@ -640,7 +637,7 @@
       <p class="eyebrow">Combine videos and images</p>
 
       <div class="panel reveal">
-        <h2>Combine multiple videos into one</h2>
+        <h2>Combine Videos &amp; Images</h2>
         <p class="hint">Add two or more video files below, reorder them with the arrows, then merge into a single video played back to back in that exact order.</p>
         <div class="row">
           <input type="file" id="combineVideoInput" accept="video/*" multiple>
@@ -650,18 +647,18 @@
           </button>
         </div>
         <div class="combine-list" id="combineVideoList"></div>
-        <div class="row" style="margin-top:14px;">
+        <div class="row mt-14">
           <button class="btn primary" id="combineVideoExportBtn">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
             Merge videos
           </button>
         </div>
         <div class="progress-wrap" id="combineVideoProgressWrap"><div class="progress-bar" id="combineVideoProgressBar"></div></div>
-        <div id="combineVideoResult" style="margin-top:12px;"></div>
+        <div id="combineVideoResult" class="mt-12"></div>
       </div>
 
       <div class="panel reveal">
-        <h2>Combine images</h2>
+        <h3>Combine images</h3>
         <p class="hint">Add two or more images, reorder them, then either merge them side by side into one image, or turn them into a slideshow video.</p>
         <div class="row">
           <input type="file" id="combineImageInput" accept="image/*" multiple>
@@ -671,7 +668,7 @@
           </button>
         </div>
         <div class="combine-list" id="combineImageList"></div>
-        <div class="slider-row" style="margin-top:14px;">
+        <div class="slider-row mt-14">
           <label>Per slide</label>
           <input type="range" id="slideDuration" min="1" max="6" value="2" step="1">
           <span id="slideDurationLabel">2s</span>
@@ -687,11 +684,11 @@
           </button>
         </div>
         <div class="progress-wrap" id="combineImageProgressWrap"><div class="progress-bar" id="combineImageProgressBar"></div></div>
-        <div id="combineImageResult" style="margin-top:12px;"></div>
+        <div id="combineImageResult" class="mt-12"></div>
       </div>
     </section>
 
-    <!-- AUTHOR SECTION (Fixes "Page has no visible author" & "Cites no sources") -->
+    <!-- AUTHOR SECTION -->
     <section id="author" class="tool-section">
       <p class="eyebrow">About the Author &amp; Transparency</p>
       <div class="panel reveal author-box">
@@ -700,17 +697,17 @@
             <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           </div>
           <div>
-            <h2 style="margin:0;">Created &amp; Maintained by Screen Studio Team</h2>
-            <p class="hint" style="margin:2px 0 0;">Open-Source Privacy Advocates &amp; Web Engineers</p>
+            <h2 class="m-0">Created &amp; Maintained by Screen Studio Team</h2>
+            <p class="hint mt-2">Open-Source Privacy Advocates &amp; Web Engineers</p>
           </div>
         </div>
-        <hr style="border:none; border-top:1px solid var(--line); margin:16px 0;">
-        <p class="hint" style="max-width:none; margin:0 0 12px; color:var(--text);">
-          <strong>Screen Studio</strong> was engineered as a 100% client-side alternative to telemetry-heavy cloud screen recorders. Built using standard <a href="https://developer.mozilla.org/en-US/docs/Web/API/Media_Capture_and_Streams_API" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">W3C Web APIs</a> (like `getDisplayMedia` and WebAudio), all processing happens in your browser. Our offline OCR technology is powered by the open-source <a href="https://github.com/naptha/tesseract.js" target="_blank" rel="noopener noreferrer" style="color:var(--accent);">Tesseract.js project</a>.
+        <hr class="author-hr">
+        <p class="hint author-desc">
+          <strong>Screen Studio</strong> was engineered as a 100% client-side alternative to telemetry-heavy cloud screen recorders. Built using standard <a href="https://developer.mozilla.org/en-US/docs/Web/API/Media_Capture_and_Streams_API" target="_blank" rel="noopener noreferrer" class="accent-link">W3C Web APIs</a> (like `getDisplayMedia` and WebAudio), all processing happens in your browser. Our offline OCR technology is powered by the open-source <a href="https://github.com/naptha/tesseract.js" target="_blank" rel="noopener noreferrer" class="accent-link">Tesseract.js project</a>.
         </p>
         <div class="row">
-          <span class="badge-offline" style="margin:0;">Verified Open Source Technology</span>
-          <span class="badge-offline" style="margin:0; background:var(--bg-soft); color:var(--text); border-color:var(--line);">Zero Tracking &bull; Zero Server Uploads</span>
+          <span class="badge-offline m-0">Verified Open Source Technology</span>
+          <span class="badge-offline badge-neutral m-0">Zero Tracking &bull; Zero Server Uploads</span>
         </div>
       </div>
     </section>
@@ -739,6 +736,7 @@
       <div class="footer-bottom">
         <span>Built to work offline, in your browser, always free.</span>
         <span>Last updated: <time datetime="2026-08-02">August 2026</time></span>
+        <span>&copy; <span id="copyrightYear"></span> Screen Studio. All rights reserved.</span>
         <span id="visitCounter" class="visit-counter"></span>
       </div>
     </footer>
