@@ -390,3 +390,65 @@ input[type=range]{ flex:1; accent-color: var(--accent); height: 6px; border-radi
   .footer-top{ grid-template-columns: 1fr; gap: 24px; }
   .site-footer{ padding: 36px 18px 24px; }
 }
+/* ---------- Proof Points & Author Card CSS ---------- */
+.proof-points-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+  text-align: left;
+}
+
+.proof-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.proof-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.proof-item strong {
+  font-size: 13.5px;
+  color: var(--text);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.proof-item p {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.author-box {
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+
+.author-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.author-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
