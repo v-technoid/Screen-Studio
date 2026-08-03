@@ -31,7 +31,6 @@
   <link rel="stylesheet" href="styles.css">
 
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
 
   <script type="application/ld+json">
 {
@@ -55,6 +54,10 @@
 }
 </script>
   <script src="https://code.market/widget.min.js" async></script>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 
 <body>
@@ -965,57 +968,62 @@
         </div>
       </section>
 
-     <footer class="site-footer">
-      <div class="footer-top">
-        
-        <div class="footer-brand">
-          <a class="brand" href="#top"><span class="brand-dot"></span>Screen Studio</a>
-          <p>A small set of tools for capturing, trimming and marking up your screen. Everything runs in this browser tab, nothing is ever uploaded.</p>
-          
-          <!-- Fixed 2x2 Badge Grid -->
-          <div class="badge-grid">
-            <div data-codemarket-widget="nl_bc10ee1b846e4b48" data-theme-bg="#ffffff" data-theme-text="slate-600" data-layout="grid" data-show-branding="false">
-              <a href="https://code.market?code.market=verified" title="ai tools code.market">
-                <img src="https://code.market/assets/manage-product/featured-logo-bright.svg" alt="ai tools code.market" />
+      <footer class="site-footer">
+        <div class="footer-top">
+
+          <div class="footer-brand">
+            <a class="brand" href="#top"><span class="brand-dot"></span>Screen Studio</a>
+            <p>A small set of tools for capturing, trimming and marking up your screen. Everything runs in this browser
+              tab, nothing is ever uploaded.</p>
+
+            <!-- Fixed 2x2 Badge Grid -->
+            <div class="badge-grid">
+              <div data-codemarket-widget="nl_bc10ee1b846e4b48" data-theme-bg="#ffffff" data-theme-text="slate-600"
+                data-layout="grid" data-show-branding="false">
+                <a href="https://code.market?code.market=verified" title="ai tools code.market">
+                  <img src="https://code.market/assets/manage-product/featured-logo-bright.svg"
+                    alt="ai tools code.market" />
+                </a>
+              </div>
+              <a href="https://twelve.tools" target="_blank">
+                <img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools">
+              </a>
+              <a href="https://tools.launchllama.co?utm_source=badge&utm_medium=referral" target="_blank"
+                rel="noopener noreferrer">
+                <img src="https://tools.launchllama.co/featured-badge.png?v=2"
+                  alt="As seen on Launch Llama Newsletter" />
+              </a>
+              <a href="https://dang.ai" target="_blank" rel="dofollow noopener">
+                <img src="https://assets.dang.ai/badges/dang-verified-light.png" alt="Verified on DANG!" />
               </a>
             </div>
-            <a href="https://twelve.tools" target="_blank">
-              <img src="https://twelve.tools/badge0-white.svg" alt="Featured on Twelve Tools">
-            </a>
-            <a href="https://tools.launchllama.co?utm_source=badge&utm_medium=referral" target="_blank" rel="noopener noreferrer">
-              <img src="https://tools.launchllama.co/featured-badge.png?v=2" alt="As seen on Launch Llama Newsletter" />
-            </a>
-            <a href="https://dang.ai" target="_blank" rel="dofollow noopener">
-              <img src="https://assets.dang.ai/badges/dang-verified-light.png" alt="Verified on DANG!" />
-            </a>
+          </div> <!-- This was the missing closing tag that broke your layout! -->
+
+          <div class="footer-col">
+            <p class="footer-heading">TOOLS</p>
+            <a href="#record">Screen recorder</a>
+            <a href="#editor">Trim, mark &amp; blur</a>
+            <a href="#audio">Audio trimmer</a>
+            <a href="#screenshot">Screenshot &amp; annotate</a>
+            <a href="#combine">Combine videos &amp; images</a>
           </div>
-        </div> <!-- This was the missing closing tag that broke your layout! -->
 
-        <div class="footer-col">
-          <p class="footer-heading">TOOLS</p>
-          <a href="#record">Screen recorder</a>
-          <a href="#editor">Trim, mark &amp; blur</a>
-          <a href="#audio">Audio trimmer</a>
-          <a href="#screenshot">Screenshot &amp; annotate</a>
-          <a href="#combine">Combine videos &amp; images</a>
+          <div class="footer-col">
+            <p class="footer-heading">GOOD TO KNOW</p>
+            <span>No sign-up, ever</span>
+            <span>No files leave this device</span>
+            <span>Works with no internet</span>
+          </div>
+
         </div>
 
-        <div class="footer-col">
-          <p class="footer-heading">GOOD TO KNOW</p>
-          <span>No sign-up, ever</span>
-          <span>No files leave this device</span>
-          <span>Works with no internet</span>
+        <div class="footer-bottom">
+          <span>Built to work offline, in your browser, always free.</span>
+          <span>Last updated: <time datetime="2026-08-02">August 2026</time></span>
+          <span>&copy; 2026 Screen Studio. All rights reserved.</span>
+          <span id="visitCounter" class="visit-counter"></span>
         </div>
-        
-      </div>
-
-      <div class="footer-bottom">
-        <span>Built to work offline, in your browser, always free.</span>
-        <span>Last updated: <time datetime="2026-08-02">August 2026</time></span>
-        <span>&copy; 2026 Screen Studio. All rights reserved.</span>
-        <span id="visitCounter" class="visit-counter"></span>
-      </div>
-    </footer>
+      </footer>
 
     </div>
   </div>
