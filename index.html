@@ -37,6 +37,7 @@
   <link rel="icon" type="image/svg+xml" href="/asset/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="/asset/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/asset/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/asset/icon-192.png">
   <link rel="apple-touch-icon" href="/asset/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
 
@@ -421,6 +422,7 @@
         <p>Pick a tool on the left. Everything below runs right here in this tab.</p></div>
     </section>
 
+  <div class="studio-zone">
   <nav class="tool-chips" aria-label="Jump to a tool"><a href="#record" data-target="record" style="--tc:#ef4444"><span class="sn-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"> <circle cx="12" cy="12" r="8" /> <circle cx="12" cy="12" r="3" fill="currentColor" /> </svg></span>Screen recorder</a><a href="#editor" data-target="editor" style="--tc:#3b82f6"><span class="sn-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"> <path d="M6 3v18M18 3v18M3 6h18M3 18h18" /> </svg></span>Video editor</a><a href="#audio" data-target="audio" style="--tc:#8b5cf6"><span class="sn-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"> <line x1="4" y1="12" x2="4" y2="12" /> <line x1="8" y1="8" x2="8" y2="16" /> <line x1="12" y1="4" x2="12" y2="20" /> <line x1="16" y1="8" x2="16" y2="16" /> <line x1="20" y1="12" x2="20" y2="12" /> </svg></span>Audio trimmer</a><a href="#screenshot" data-target="screenshot" style="--tc:#10b981"><span class="sn-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" /> <circle cx="12" cy="13" r="4" /> </svg></span>Screenshot and OCR</a><a href="#combine" data-target="combine" style="--tc:#f59e0b"><span class="sn-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <rect x="3" y="3" width="8" height="8" rx="1.5" /> <rect x="13" y="13" width="8" height="8" rx="1.5" /> <path d="M8 13v3a2 2 0 0 0 2 2h3" /> <path d="M16 11V8a2 2 0 0 0-2-2h-3" /> </svg></span>Combine media</a></nav>
   <div class="layout">
 
@@ -1323,6 +1325,7 @@
 
     </div>
   </div>
+  </div>
 
     <section class="sec" id="faq">
       <div class="sec-head reveal"><p class="kicker">FAQ</p><h2>Questions people ask</h2></div>
@@ -1415,12 +1418,13 @@
         <p><strong>Recnook</strong> uses standard browser features such as
           <a href="https://developer.mozilla.org/en-US/docs/Web/API/Screen_Capture_API" target="_blank" rel="noopener noreferrer">screen capture</a>
           and Web Audio, so all processing happens on your computer. Text extraction is powered by the open source
-          <a href="https://github.com/naptha/tesseract.js" target="_blank" rel="noopener noreferrer">Tesseract.js</a> project.
-          The code is on <a href="https://github.com/v-technoid/Screen-Studio" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
+          <a href="https://tesseract.projectnaptha.com/" target="_blank" rel="noopener noreferrer">Tesseract.js</a> project.</p>
       </div>
     </section>
     <section class="cta-band reveal">
-      <div class="cta-inner">
+      <div class="cta-inner" id="ctaCard">
+        <span class="cta-glow" aria-hidden="true"></span>
+        <div class="cta-floats" aria-hidden="true"><span class="f1">No sign up</span><span class="f2">No watermark</span><span class="f3">Works offline</span><span class="f4">Nothing uploaded</span></div>
         <h2>Ready when you are.</h2>
         <p>Open the studio, press record, and everything stays on your device.</p>
         <a class="btn primary btn-lg btn-glow" href="/#record" data-start-recording data-track="cta_band_start"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg><span class="btn-label">Start recording</span></a>
@@ -1445,7 +1449,7 @@
       <div class="ft-col"><p class="ft-h">Tools</p><a href="/screen-recorder">Screen recorder</a><a href="/blur-and-trim-video">Blur and trim video</a><a href="/audio-trimmer">Audio trimmer</a><a href="/screenshot-annotate-ocr">Screenshot and OCR</a><a href="/combine-videos-images">Combine media</a></div>
       <div class="ft-col"><p class="ft-h">Explore</p>
         <a href="/#features">Features</a><a href="/#how">How it works</a><a href="/#faq">FAQ</a><a href="/privacy">Privacy</a>
-        <a href="https://github.com/v-technoid/Screen-Studio" target="_blank" rel="noopener">GitHub</a>
+        <a href="/#studio">Open the studio</a>
       </div>
       <div class="ft-col"><p class="ft-h">Good to know</p>
         <span>No sign up, ever</span><span>Your files never leave this device</span><span>Works offline after your first visit</span>
@@ -1453,7 +1457,6 @@
     </div>
     <div class="ft-bottom">
       <span>&copy; <span id="copyrightYear">2026</span> Recnook</span>
-      <span>Last updated <time datetime="2026-10-28">October 2026</time></span>
       <span id="visitCounter" class="visit-counter"></span>
     </div>
   </footer>

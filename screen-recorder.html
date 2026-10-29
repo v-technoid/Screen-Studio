@@ -36,6 +36,7 @@
   <link rel="icon" type="image/svg+xml" href="/asset/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="/asset/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/asset/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/asset/icon-192.png">
   <link rel="apple-touch-icon" href="/asset/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
 
@@ -266,7 +267,9 @@
     </section>
 
     <section class="cta-band reveal">
-      <div class="cta-inner">
+      <div class="cta-inner" id="ctaCard">
+        <span class="cta-glow" aria-hidden="true"></span>
+        <div class="cta-floats" aria-hidden="true"><span class="f1">No sign up</span><span class="f2">No watermark</span><span class="f3">Works offline</span><span class="f4">Nothing uploaded</span></div>
         <h2>Ready when you are.</h2>
         <p>Open the studio, press record, and everything stays on your device.</p>
         <a class="btn primary btn-lg btn-glow" href="/#record" data-start-recording data-track="cta_band_start"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg><span class="btn-label">Start recording</span></a>
@@ -283,7 +286,7 @@
       <div class="ft-col"><p class="ft-h">Tools</p><a href="/screen-recorder">Screen recorder</a><a href="/blur-and-trim-video">Blur and trim video</a><a href="/audio-trimmer">Audio trimmer</a><a href="/screenshot-annotate-ocr">Screenshot and OCR</a><a href="/combine-videos-images">Combine media</a></div>
       <div class="ft-col"><p class="ft-h">Explore</p>
         <a href="/#features">Features</a><a href="/#how">How it works</a><a href="/#faq">FAQ</a><a href="/privacy">Privacy</a>
-        <a href="https://github.com/v-technoid/Screen-Studio" target="_blank" rel="noopener">GitHub</a>
+        <a href="/#studio">Open the studio</a>
       </div>
       <div class="ft-col"><p class="ft-h">Good to know</p>
         <span>No sign up, ever</span><span>Your files never leave this device</span><span>Works offline after your first visit</span>
@@ -291,7 +294,6 @@
     </div>
     <div class="ft-bottom">
       <span>&copy; <span id="copyrightYear">2026</span> Recnook</span>
-      <span>Last updated <time datetime="2026-10-28">October 2026</time></span>
       <span id="visitCounter" class="visit-counter"></span>
     </div>
   </footer>

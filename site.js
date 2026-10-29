@@ -64,6 +64,80 @@
     });
   });
 
+  // ---------- FAQ: smooth open and close, one answer open at a time ----------
+  var faqItems = document.querySelectorAll('.faq-item');
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var EASE = 'cubic-bezier(.22,.9,.3,1)';
+  function faqOpen(d){
+    if(d._anim) d._anim.cancel();
+    d.classList.remove('is-closing');
+    var from = d.offsetHeight;
+    d.open = true;
+    if(reduceMotion || !d.animate) return;
+    var to = d.scrollHeight;
+    d.style.height = from + 'px';
+    var p = d.querySelector('p');
+    if(p) p.animate({ opacity: [0, 1], transform: ['translateY(-8px)', 'none'] }, { duration: 520, easing: EASE, delay: 60, fill: 'backwards' });
+    d._anim = d.animate({ height: [from + 'px', to + 'px'] }, { duration: 460, easing: EASE });
+    d._anim.onfinish = d._anim.oncancel = function(){ d.style.height = ''; d._anim = null; };
+  }
+  function faqClose(d){
+    if(!d.open) return;
+    if(d._anim) d._anim.cancel();
+    var summary = d.querySelector('summary');
+    d.classList.add('is-closing');
+    if(reduceMotion || !d.animate){ d.open = false; d.classList.remove('is-closing'); return; }
+    var from = d.offsetHeight;
+    var to = summary.offsetHeight + (d.offsetHeight - d.clientHeight);
+    d._anim = d.animate({ height: [from + 'px', to + 'px'] }, { duration: 380, easing: EASE });
+    d._anim.onfinish = function(){ d.open = false; d.classList.remove('is-closing'); d.style.height = ''; d._anim = null; };
+    d._anim.oncancel = function(){ d.style.height = ''; };
+  }
+  faqItems.forEach(function(d){
+    var summary = d.querySelector('summary');
+    if(!summary) return;
+    summary.addEventListener('click', function(e){
+      e.preventDefault();
+      if(d.open && !d.classList.contains('is-closing')){ faqClose(d); return; }
+      faqItems.forEach(function(o){ if(o !== d) faqClose(o); });
+      faqOpen(d);
+    });
+  });
+
+  // ---------- top bar: hide while scrolling down, slide back in when scrolling up ----------
+  var topbarEl = document.querySelector('.topbar');
+  if(topbarEl){
+    var lastY = window.pageYOffset, ticking = false;
+    var setBarHidden = function(hidden){
+      topbarEl.classList.toggle('is-hidden', hidden);
+      document.body.classList.toggle('bar-hidden', hidden);
+    };
+    var barBusy = function(){
+      return (mobileNav && mobileNav.classList.contains('open')) || topbarEl.matches(':hover') || topbarEl.querySelector('.menu:focus-within');
+    };
+    var onBarScroll = function(){
+      ticking = false;
+      var y = Math.max(0, window.pageYOffset);
+      var dy = y - lastY;
+      if(y < 70){ setBarHidden(false); lastY = y; return; }
+      if(Math.abs(dy) < 8) return;
+      if(dy > 0){ if(!barBusy()) setBarHidden(true); } else { setBarHidden(false); }
+      lastY = y;
+    };
+    window.addEventListener('scroll', function(){ if(!ticking){ ticking = true; window.requestAnimationFrame(onBarScroll); } }, { passive: true });
+    topbarEl.addEventListener('focusin', function(){ setBarHidden(false); });
+  }
+
+  // ---------- start recording card: light follows the pointer ----------
+  var ctaCard = document.getElementById('ctaCard');
+  if(ctaCard && !reduceMotion){
+    ctaCard.addEventListener('pointermove', function(e){
+      var r = ctaCard.getBoundingClientRect();
+      ctaCard.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      ctaCard.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  }
+
   // ---------- dark mode ----------
   var themeToggleBtn = document.getElementById('themeToggleBtn');
   var sunIcon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
