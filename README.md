@@ -1,14 +1,16 @@
-# 🎥 Screen Studio
+# 🎥 Recnook
 
 > **Capture, edit, transcribe, and convert videos and images directly in your browser — with 100% client-side privacy.**
 
-Screen Studio is a lightweight, all-in-one web-based screen recorder and media editing suite built using pure HTML5, CSS3, and modern Web APIs. Every single operation — from video recording and webcam overlays to audio mixing, image conversion, and AI-powered text extraction (OCR) — runs entirely on your local machine.
+Recnook is a lightweight, all-in-one web-based screen recorder and media editing suite built using pure HTML5, CSS3, and modern Web APIs. Every single operation — from video recording and webcam overlays to audio mixing, image conversion, and AI-powered text extraction (OCR) — runs entirely on your local machine.
+
+**Live site:** https://recnook.vercel.app/ (the old address redirects here, see `vercel.json`).
 
 ---
 
 ## 🔒 The Power of Client-Only Privacy
 
-In an era of cloud-based SaaS tools, Screen Studio takes a radically different approach: **your files are never uploaded**. The only thing that loads from the network is the page itself and Vercel Web Analytics (page views and a few click events, never your media).
+In an era of cloud-based SaaS tools, Recnook takes a radically different approach: **your files are never uploaded**. The only thing that loads from the network is the page itself and Vercel Web Analytics (page views and a few click events, never your media).
 
 ### Key Benefits of 100% Client-Side Processing:
 
@@ -24,7 +26,9 @@ In an era of cloud-based SaaS tools, Screen Studio takes a radically different a
 
 ### 📹 1. Screen, Webcam & Dual-Audio Recorder
 * **Flexible Capture:** Record entire screens, specific application windows, or browser tabs.
-* **Webcam Overlay (Picture-in-Picture):** Embed a circular camera bubble in the bottom corner of your recording for tutorials and presentations.
+* **Webcam bubble:** Choose the corner, size (small, medium, large), shape (circle or rounded square) and mirroring.
+* **Look of your video:** Put the screen on a gradient background (Aurora, Sunset, Ocean, Mint, Candy, Midnight, Graphite) with adjustable space and rounded corners. A live preview shows the result.
+* **Save to a file while recording:** In Chrome and Edge the video is written to disk as you record, using the File System Access API, so long recordings do not use up memory.
 * **Dual-Channel Audio Mixer:** Simultaneously record and mix both **System Audio** (what other meeting attendees say) and **Microphone Audio** (external USB mics or headsets) into a single synchronized soundtrack — perfect for Microsoft Teams, Zoom, or Google Meet calls.
 * **Live Voice Teleprompter & Transcriber:** Live speech-to-text captions roll across the screen in real time as you speak, powered by the native Web Speech API.
 * **Recorder controls:** pause and resume, a 3 or 5 second countdown, a live timer, quality (best, 1080p, 720p), 15, 30 or 60 fps, and a cursor on or off switch.
@@ -99,7 +103,7 @@ In an era of cloud-based SaaS tools, Screen Studio takes a radically different a
 
 ## 🚀 Getting Started
 
-Since Screen Studio is a static web application, no build tools, Node.js runtime, or npm installs are required!
+Since Recnook is a static web application, no build tools, Node.js runtime, or npm installs are required!
 
 ### Local Quickstart
 
@@ -142,7 +146,7 @@ Then open the URL shown in the terminal.
 
 ## 🌐 Deployment
 
-Deploying **Screen Studio** takes less than 30 seconds on any static hosting platform.
+Deploying **Recnook** takes less than 30 seconds on any static hosting platform.
 
 ### Deploy to Vercel
 

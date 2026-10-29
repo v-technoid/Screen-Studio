@@ -1,4 +1,4 @@
-/* Screen Studio: site level behaviour (analytics events, hero button, offline support, install button).
+/* Recnook: site level behaviour (analytics events, hero button, offline support, install button).
  * The tool code lives in app.js. This file never touches your recordings or files.
  */
 (function () {
@@ -32,41 +32,87 @@
     document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('is-visible'); });
   }
 
-  // ---------- side nav active link ----------
-  var sideLinks = document.querySelectorAll('.side-nav a');
-  if(sideLinks.length && 'IntersectionObserver' in window){
-    var sectionMap = {};
-    sideLinks.forEach(function(a){ sectionMap[a.dataset.target] = a; });
+  // ---------- side nav active tool (sidebar and the chip bar on small screens) ----------
+  var toolLinks = document.querySelectorAll('.side-nav .sn-tool, .tool-chips a');
+  if(toolLinks.length && 'IntersectionObserver' in window){
     var navObserver = new IntersectionObserver(function(entries){
       entries.forEach(function(entry){
-        var link = sectionMap[entry.target.id];
-        if(!link) return;
-        if(entry.isIntersecting){
-          sideLinks.forEach(function(a){ a.classList.remove('active'); });
-          link.classList.add('active');
-        }
+        if(!entry.isIntersecting) return;
+        var id = entry.target.id;
+        toolLinks.forEach(function(a){
+          var on = a.dataset.target === id;
+          a.classList.toggle('active', on);
+          if(on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+          var grp = a.closest('.sn-group');
+          if(grp) grp.classList.toggle('active', on);
+          if(on && a.closest('.tool-chips')){ try{ a.scrollIntoView({ inline: 'center', block: 'nearest' }); }catch(e){} }
+        });
       });
     }, { rootMargin: '-40% 0px -50% 0px' });
     document.querySelectorAll('.tool-section').forEach(function(sec){ navObserver.observe(sec); });
   }
+
+  // Sub feature links: some panels stay hidden until a file is loaded, so fall back to the tool itself.
+  document.querySelectorAll('.sn-sub-link').forEach(function(link){
+    link.addEventListener('click', function(e){
+      var target = document.querySelector(link.getAttribute('href'));
+      if(target && target.getClientRects().length) return;
+      var grp = link.closest('.sn-group');
+      var tool = grp && grp.querySelector('.sn-tool');
+      var section = tool && document.getElementById(tool.dataset.target);
+      if(section){ e.preventDefault(); section.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
 
   // ---------- dark mode ----------
   var themeToggleBtn = document.getElementById('themeToggleBtn');
   var sunIcon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
   var moonIcon = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
 
+  var themeColorMetas = document.querySelectorAll('meta[name="theme-color"]');
   function applyTheme(t){
     document.documentElement.setAttribute('data-theme', t);
     try{ localStorage.setItem('ss-theme', t); }catch(e){}
-    if(themeToggleBtn) themeToggleBtn.innerHTML = t === 'dark' ? sunIcon : moonIcon;
+    if(themeToggleBtn){
+      themeToggleBtn.innerHTML = t === 'dark' ? sunIcon : moonIcon;
+      themeToggleBtn.setAttribute('aria-label', t === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+    }
+    // keep the browser bar color in step with a manual choice, not only the system setting
+    themeColorMetas.forEach(function(m){ m.setAttribute('content', t === 'dark' ? '#06070c' : '#f6f6fb'); m.removeAttribute('media'); });
   }
   var savedTheme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
   try{ savedTheme = localStorage.getItem('ss-theme') || savedTheme; }catch(e){}
   applyTheme(savedTheme);
+
+  // Click: a circle of the new theme grows from the button (Chrome, Edge, Safari). Other browsers get a soft fade.
+  function switchTheme(next, x, y){
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(themeToggleBtn && !reduce){
+      themeToggleBtn.classList.remove('spin'); void themeToggleBtn.offsetWidth;
+    }
+    if(reduce){ applyTheme(next); return; }
+    if(document.startViewTransition){
+      var radius = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+      var vt = document.startViewTransition(function(){ applyTheme(next); if(themeToggleBtn) themeToggleBtn.classList.add('spin'); });
+      vt.ready.then(function(){
+        document.documentElement.animate(
+          { clipPath: ['circle(0px at ' + x + 'px ' + y + 'px)', 'circle(' + radius + 'px at ' + x + 'px ' + y + 'px)'] },
+          { duration: 650, easing: 'cubic-bezier(.22,.9,.3,1)', pseudoElement: '::view-transition-new(root)' }
+        );
+      }).catch(function(){});
+    } else {
+      var root = document.documentElement;
+      root.classList.add('theme-fade');
+      applyTheme(next);
+      if(themeToggleBtn) themeToggleBtn.classList.add('spin');
+      setTimeout(function(){ root.classList.remove('theme-fade'); }, 520);
+    }
+  }
   if(themeToggleBtn){
     themeToggleBtn.addEventListener('click', function(){
       var cur = document.documentElement.getAttribute('data-theme');
-      applyTheme(cur === 'dark' ? 'light' : 'dark');
+      var r = themeToggleBtn.getBoundingClientRect();
+      switchTheme(cur === 'dark' ? 'light' : 'dark', r.left + r.width / 2, r.top + r.height / 2);
     });
   }
 

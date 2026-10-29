@@ -184,6 +184,172 @@
     });
   }
 
+
+  // ---- look: background, rounded corners, webcam bubble (one shared drawing routine) ----
+  var BG_PRESETS = {
+    aurora:   ['#6366f1', '#8b5cf6', '#06b6d4'],
+    sunset:   ['#f97316', '#ec4899', '#8b5cf6'],
+    ocean:    ['#0ea5e9', '#2563eb', '#1e1b4b'],
+    mint:     ['#34d399', '#22d3ee', '#3b82f6'],
+    candy:    ['#f9a8d4', '#c4b5fd', '#93c5fd'],
+    midnight: ['#0f172a', '#1e293b', '#334155'],
+    graphite: ['#18181b', '#3f3f46']
+  };
+  var PAD_VALUES = { small: 0.03, medium: 0.06, large: 0.10 };
+  var RADIUS_VALUES = { none: 0, soft: 0.006, round: 0.014 };
+  var CAM_SIZES = { small: 0.12, medium: 0.16, large: 0.22 };
+
+  function elVal(id, fallback){ var el = document.getElementById(id); return el ? el.value : fallback; }
+  function readLook(){
+    var cam = document.getElementById('recCamMirror');
+    return {
+      bg: elVal('recBgSelect', 'none'),
+      pad: PAD_VALUES[elVal('recPadSelect', 'medium')] || 0.06,
+      radius: RADIUS_VALUES[elVal('recRadiusSelect', 'soft')] || 0,
+      camPos: elVal('recCamPos', 'br'),
+      camSize: CAM_SIZES[elVal('recCamSize', 'medium')] || 0.16,
+      camShape: elVal('recCamShape', 'circle'),
+      mirror: cam ? cam.checked : true
+    };
+  }
+  function roundedPath(c, x, y, w, h, r){
+    r = Math.max(0, Math.min(r, w / 2, h / 2));
+    c.beginPath();
+    c.moveTo(x + r, y);
+    c.arcTo(x + w, y, x + w, y + h, r);
+    c.arcTo(x + w, y + h, x, y + h, r);
+    c.arcTo(x, y + h, x, y, r);
+    c.arcTo(x, y, x + w, y, r);
+    c.closePath();
+  }
+  // The output canvas is the screen size plus the padding, so the screen keeps its full sharpness.
+  function lookLayout(vw, vh, look){
+    var padPx = look.bg === 'none' ? 0 : Math.round(vw * look.pad);
+    var W = vw + 2 * padPx, H = vh + 2 * padPx;
+    var cap = 3840;
+    if(W > cap){ var k = cap / W; W = cap; H = Math.round(H * k); padPx = Math.round(padPx * k); }
+    return { W: W - (W % 2), H: H - (H % 2), pad: padPx };
+  }
+  // screen: { w, h, draw(x, y, w, h) }   cam: null or { draw(x, y, size, mirror) }
+  function drawLook(c, lay, look, screen, cam){
+    var W = lay.W, H = lay.H;
+    if(look.bg !== 'none' && BG_PRESETS[look.bg]){
+      var cols = BG_PRESETS[look.bg];
+      var g = c.createLinearGradient(0, 0, W, H);
+      cols.forEach(function(col, i){ g.addColorStop(i / (cols.length - 1), col); });
+      c.fillStyle = g;
+    } else {
+      c.fillStyle = '#000';
+    }
+    c.fillRect(0, 0, W, H);
+
+    var ix = lay.pad, iy = lay.pad, iw = W - 2 * lay.pad, ih = H - 2 * lay.pad;
+    var sc = Math.min(iw / screen.w, ih / screen.h);
+    var dw = screen.w * sc, dh = screen.h * sc;
+    var dx = ix + (iw - dw) / 2, dy = iy + (ih - dh) / 2;
+    var r = look.bg === 'none' ? 0 : W * look.radius;
+
+    if(look.bg !== 'none'){
+      c.save();
+      c.shadowColor = 'rgba(0,0,0,0.45)';
+      c.shadowBlur = W * 0.03;
+      c.shadowOffsetY = W * 0.01;
+      c.fillStyle = '#000';
+      roundedPath(c, dx, dy, dw, dh, r);
+      c.fill();
+      c.restore();
+    }
+    c.save();
+    roundedPath(c, dx, dy, dw, dh, r);
+    c.clip();
+    screen.draw(dx, dy, dw, dh);
+    c.restore();
+
+    if(cam){
+      var s = W * look.camSize, m = W * 0.025;
+      var x = look.camPos.charAt(1) === 'l' ? m : W - s - m;
+      var y = look.camPos.charAt(0) === 't' ? m : H - s - m;
+      var cr = look.camShape === 'circle' ? s / 2 : s * 0.22;
+      c.save();
+      c.shadowColor = 'rgba(0,0,0,0.4)';
+      c.shadowBlur = W * 0.012;
+      c.shadowOffsetY = W * 0.004;
+      c.fillStyle = '#111';
+      roundedPath(c, x, y, s, s, cr);
+      c.fill();
+      c.restore();
+      c.save();
+      roundedPath(c, x, y, s, s, cr);
+      c.clip();
+      cam.draw(x, y, s, look.mirror);
+      c.restore();
+      c.save();
+      roundedPath(c, x, y, s, s, cr);
+      c.strokeStyle = 'rgba(255,255,255,0.9)';
+      c.lineWidth = Math.max(3, W * 0.004);
+      c.stroke();
+      c.restore();
+    }
+  }
+
+  // Ticks come from a worker, because normal timers and animation frames slow down when this tab is in the background.
+  function makeTicker(fps, fn){
+    try{
+      var src = 'var t=setInterval(function(){postMessage(0)},' + Math.round(1000 / fps) + ');onmessage=function(e){if(e.data==="stop"){clearInterval(t);close();}}';
+      var url = URL.createObjectURL(new Blob([src], { type: 'text/javascript' }));
+      var w = new Worker(url);
+      w.onmessage = fn;
+      return { stop: function(){ try{ w.postMessage('stop'); w.terminate(); }catch(e){} URL.revokeObjectURL(url); } };
+    }catch(err){
+      var id = setInterval(fn, Math.round(1000 / fps));
+      return { stop: function(){ clearInterval(id); } };
+    }
+  }
+
+  // ---- live preview of the look ----
+  var lookPreview = document.getElementById('lookPreview');
+  function paintLookPreview(){
+    if(!lookPreview) return;
+    var c = lookPreview.getContext('2d');
+    var look = readLook();
+    var camOn = recWebcamPipEl && recWebcamPipEl.checked;
+    var lay = lookLayout(1600, 900, look);
+    var k = lookPreview.width / lay.W;
+    lookPreview.height = Math.round(lay.H * k);
+    c.setTransform(k, 0, 0, k, 0, 0);
+    var screen = { w: 1600, h: 900, draw: function(x, y, w, h){
+      c.fillStyle = '#f8fafc'; c.fillRect(x, y, w, h);
+      c.fillStyle = '#e2e8f0'; c.fillRect(x, y, w, h * 0.07);
+      var dots = ['#f87171', '#fbbf24', '#34d399'];
+      dots.forEach(function(col, i){ c.fillStyle = col; c.beginPath(); c.arc(x + w * (0.025 + i * 0.022), y + h * 0.035, h * 0.015, 0, 6.3); c.fill(); });
+      c.fillStyle = '#cbd5e1';
+      for(var i = 0; i < 6; i++){ c.fillRect(x + w * 0.06, y + h * (0.16 + i * 0.1), w * (0.5 - (i % 3) * 0.08), h * 0.035); }
+      c.fillStyle = '#93c5fd'; c.fillRect(x + w * 0.66, y + h * 0.16, w * 0.28, h * 0.4);
+    } };
+    var cam = camOn ? { draw: function(x, y, s){
+      c.fillStyle = '#94a3b8'; c.fillRect(x, y, s, s);
+      c.fillStyle = '#e2e8f0'; c.beginPath(); c.arc(x + s / 2, y + s * 0.4, s * 0.2, 0, 6.3); c.fill();
+      c.beginPath(); c.ellipse(x + s / 2, y + s * 1.0, s * 0.38, s * 0.3, 0, 0, 6.3); c.fill();
+    } } : null;
+    drawLook(c, lay, look, screen, cam);
+  }
+  var camOptsBox = document.getElementById('recCamOptions');
+  function syncLookUi(){
+    if(camOptsBox) camOptsBox.hidden = !(recWebcamPipEl && recWebcamPipEl.checked);
+    paintLookPreview();
+  }
+  ['recBgSelect', 'recPadSelect', 'recRadiusSelect', 'recCamPos', 'recCamSize', 'recCamShape', 'recCamMirror', 'recWebcamPip'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.addEventListener('change', syncLookUi);
+  });
+  syncLookUi();
+
+  // ---- save straight to disk (Chrome and Edge) ----
+  var recDiskEl = document.getElementById('recSaveToDisk');
+  var canSaveToDisk = typeof window.showSaveFilePicker === 'function';
+  var recDiskBox = document.getElementById('recDiskBox');
+  if(recDiskBox && !canSaveToDisk) recDiskBox.hidden = true;
+
   if(startRecBtn){
     startRecBtn.addEventListener('click', async function(){
       try{
@@ -191,6 +357,23 @@
         var wantsMicAudio = recMicAudioEl && recMicAudioEl.checked;
         var wantsWebcamPip = recWebcamPipEl && recWebcamPipEl.checked;
         var wantsAutoCaptions = recAutoCaptionsEl && recAutoCaptionsEl.checked;
+
+        // The save dialog has to open straight from the click, so it comes before the screen picker.
+        var saveHandle = null, diskWriter = null, writeChain = Promise.resolve(), writeFailed = false;
+        if(canSaveToDisk && recDiskEl && recDiskEl.checked){
+          var stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+          try{
+            saveHandle = await window.showSaveFilePicker({
+              suggestedName: 'recording-' + stamp + '.webm',
+              types: [{ description: 'WebM video', accept: { 'video/webm': ['.webm'] } }]
+            });
+            diskWriter = await saveHandle.createWritable();
+          }catch(diskErr){
+            saveHandle = null; diskWriter = null;
+            if(diskErr && diskErr.name === 'AbortError'){ recStatus.textContent = 'Save cancelled. Nothing was recorded.'; track('recording_cancelled', { reason: 'save_dialog' }); return; }
+            toast('Could not open a file on your disk, so this recording will be kept in memory instead.');
+          }
+        }
 
         // Quality, frame rate and cursor are requests: the browser picks the closest it can do.
         var qualitySel = document.getElementById('recQualitySelect');
@@ -220,7 +403,7 @@
           try{
             var userStream = await navigator.mediaDevices.getUserMedia({
               audio: (wantsMicAudio || wantsAutoCaptions) ? { echoCancellation: true, noiseSuppression: true } : false,
-              video: wantsWebcamPip ? { width: 400, height: 400 } : false
+              video: wantsWebcamPip ? { width: { ideal: 640 }, height: { ideal: 480 } } : false
             });
             if((wantsMicAudio || wantsAutoCaptions) && userStream.getAudioTracks().length > 0) micStream = new MediaStream([userStream.getAudioTracks()[0]]);
             if(wantsWebcamPip && userStream.getVideoTracks().length > 0) webcamStream = new MediaStream([userStream.getVideoTracks()[0]]);
@@ -230,54 +413,48 @@
         }
 
         var videoTrackToRecord = displayStream.getVideoTracks()[0];
-        var pipCanvas = null, pipCtx = null, pipAnimId = null;
-        var tempScreenVid = null, tempCamVid = null;
+        var ticker = null, compCanvas = null;
+        var look = readLook();
+        var needsComposite = !!webcamStream || look.bg !== 'none';
 
-        if(webcamStream){
-          pipCanvas = document.createElement('canvas');
-          pipCtx = pipCanvas.getContext('2d');
-          
-          tempScreenVid = document.createElement('video');
-          tempScreenVid.srcObject = displayStream;
-          tempScreenVid.muted = true;
-          await tempScreenVid.play();
-
-          tempCamVid = document.createElement('video');
-          tempCamVid.srcObject = webcamStream;
-          tempCamVid.muted = true;
-          await tempCamVid.play();
-
-          pipCanvas.width = tempScreenVid.videoWidth || 1920;
-          pipCanvas.height = tempScreenVid.videoHeight || 1080;
-
-          function renderPipLoop(){
-            if(!pipCtx) return;
-            pipCtx.drawImage(tempScreenVid, 0, 0, pipCanvas.width, pipCanvas.height);
-            
-            var pipSize = Math.floor(pipCanvas.width * 0.16);
-            var pad = Math.floor(pipCanvas.width * 0.02);
-            var cx = pipCanvas.width - pipSize/2 - pad;
-            var cy = pipCanvas.height - pipSize/2 - pad;
-
-            pipCtx.save();
-            pipCtx.beginPath();
-            pipCtx.arc(cx, cy, pipSize/2, 0, Math.PI * 2);
-            pipCtx.clip();
-            pipCtx.drawImage(tempCamVid, cx - pipSize/2, cy - pipSize/2, pipSize, pipSize);
-            pipCtx.restore();
-
-            pipCtx.save();
-            pipCtx.beginPath();
-            pipCtx.arc(cx, cy, pipSize/2, 0, Math.PI * 2);
-            pipCtx.strokeStyle = '#2563eb';
-            pipCtx.lineWidth = Math.max(4, pipCanvas.width * 0.004);
-            pipCtx.stroke();
-            pipCtx.restore();
-
-            pipAnimId = requestAnimationFrame(renderPipLoop);
+        if(needsComposite){
+          var screenVid = document.createElement('video');
+          screenVid.srcObject = displayStream;
+          screenVid.muted = true;
+          await screenVid.play();
+          var camVid = null;
+          if(webcamStream){
+            camVid = document.createElement('video');
+            camVid.srcObject = webcamStream;
+            camVid.muted = true;
+            await camVid.play();
           }
-          renderPipLoop();
-          videoTrackToRecord = pipCanvas.captureStream(30).getVideoTracks()[0];
+          var baseW = screenVid.videoWidth || 1920, baseH = screenVid.videoHeight || 1080;
+          var lay = lookLayout(baseW, baseH, look);
+          compCanvas = document.createElement('canvas');
+          compCanvas.width = lay.W; compCanvas.height = lay.H;
+          var cc = compCanvas.getContext('2d');
+          var screenSrc = {
+            get w(){ return screenVid.videoWidth || baseW; },
+            get h(){ return screenVid.videoHeight || baseH; },
+            draw: function(x, y, w, h){ cc.drawImage(screenVid, x, y, w, h); }
+          };
+          var camSrc = camVid ? { draw: function(x, y, size, mirror){
+            var cw = camVid.videoWidth, ch = camVid.videoHeight;
+            if(!cw || !ch) return;
+            var side = Math.min(cw, ch), sx = (cw - side) / 2, sy = (ch - side) / 2;
+            if(mirror){
+              cc.save(); cc.translate(x + size, y); cc.scale(-1, 1);
+              cc.drawImage(camVid, sx, sy, side, side, 0, 0, size, size);
+              cc.restore();
+            } else {
+              cc.drawImage(camVid, sx, sy, side, side, x, y, size, size);
+            }
+          } } : null;
+          var paintComposite = function(){ drawLook(cc, lay, look, screenSrc, camSrc); };
+          paintComposite();
+          videoTrackToRecord = compCanvas.captureStream(wantFps).getVideoTracks()[0];
+          ticker = makeTicker(wantFps, paintComposite);
         }
 
         var combinedStream = new MediaStream([videoTrackToRecord]);
@@ -368,21 +545,43 @@
         if(!MediaRecorder.isTypeSupported(mimeType)) mimeType = 'video/webm';
         mediaRecorder = new MediaRecorder(combinedStream, { mimeType: mimeType, videoBitsPerSecond: qualityVal === '720' ? 3500000 : 8000000 });
         
-        mediaRecorder.ondataavailable = function(e){ if(e.data.size > 0) recordedChunks.push(e.data); };
+        mediaRecorder.ondataavailable = function(e){
+          if(e.data.size <= 0) return;
+          if(diskWriter){
+            // Pieces go to the file as they arrive, one after the other, so a long recording never fills memory.
+            writeChain = writeChain.then(function(){ if(!writeFailed) return diskWriter.write(e.data); }).catch(function(){ writeFailed = true; });
+          } else {
+            recordedChunks.push(e.data);
+          }
+        };
         
-        mediaRecorder.onstop = function(){
+        mediaRecorder.onstop = async function(){
           var recMs = recElapsedMs + (recTimerId ? performance.now() - recTickStart : 0);
           stopRecTimer();
-          if(pipAnimId) cancelAnimationFrame(pipAnimId);
+          if(ticker) ticker.stop();
           if(liveSpeechRecognition){ try{ liveSpeechRecognition.stop(); }catch(e){} liveSpeechRecognition = null; }
           if(liveTranscribeBox) liveTranscribeBox.hidden = true;
           
-          var blob = new Blob(recordedChunks, { type: 'video/webm' });
+          var blob = null, savedName = '';
+          if(diskWriter){
+            await writeChain;
+            try{ await diskWriter.close(); }catch(closeErr){ writeFailed = true; }
+            if(!writeFailed){
+              try{ blob = await saveHandle.getFile(); savedName = saveHandle.name; }catch(readErr){ writeFailed = true; }
+            }
+            if(writeFailed) toast('Writing to your disk failed part of the way. Check free space and try again.');
+          }
+          if(!blob) blob = new Blob(recordedChunks, { type: 'video/webm' });
           recordedBlobUrl = URL.createObjectURL(blob);
           recDownloadLink.href = recordedBlobUrl;
-          recSaved = false;
+          recDownloadLink.download = savedName || 'recording.webm';
+          recSaved = !!savedName;
           var infoEl = document.getElementById('recResultInfo');
-          if(infoEl) infoEl.textContent = fmtClock(recMs) + ' long, ' + fmtBytes(blob.size) + '. It only exists in this tab until you download it.';
+          if(infoEl){
+            infoEl.textContent = savedName
+              ? fmtClock(recMs) + ' long, ' + fmtBytes(blob.size) + '. Already saved on your disk as ' + savedName + '.'
+              : fmtClock(recMs) + ' long, ' + fmtBytes(blob.size) + '. It only exists in this tab until you download it.';
+          }
           track('recording_finished');
           setTimeout(function(){ if(recResultPanel) recResultPanel.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 150);
           recResultPanel.hidden = false;
@@ -399,7 +598,7 @@
           if(mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
         });
 
-        mediaRecorder.start();
+        if(diskWriter) mediaRecorder.start(1000); else mediaRecorder.start();
         startRecBtn.disabled = true;
         stopRecBtn.disabled = false;
         if(pauseRecBtn) pauseRecBtn.disabled = false;
@@ -407,9 +606,12 @@
         paintRecStatus(false);
         track('recording_started', {
           webcam: !!wantsWebcamPip, system_audio: !!wantsSystemAudio,
-          mic: !!wantsMicAudio, captions: !!wantsAutoCaptions
+          mic: !!wantsMicAudio, captions: !!wantsAutoCaptions,
+          background: look.bg, to_disk: !!diskWriter
         });
       }catch(err){
+        if(typeof diskWriter !== 'undefined' && diskWriter){ try{ diskWriter.abort(); }catch(e){} }
+        if(typeof ticker !== 'undefined' && ticker) ticker.stop();
         if(countdownOverlay) countdownOverlay.hidden = true;
         recStatus.textContent = 'Could not start recording: ' + err.message;
         // Closing the browser's share picker is normal, so it is counted separately from real failures.
@@ -1262,7 +1464,7 @@
       var blob = new Blob([JSON.stringify(projectData, null, 2)], { type: 'application/json' });
       var url = URL.createObjectURL(blob);
       var a = document.createElement('a');
-      a.href = url; a.download = 'screen-studio-project.json';
+      a.href = url; a.download = 'recnook-project.json';
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
     });
   }
@@ -1691,7 +1893,7 @@
           exportProgressBar.style.width = (70 + done / all * 30) + '%';
         });
         var url = URL.createObjectURL(blob);
-        exportResult.innerHTML = '<a class="link-btn" href="' + url + '" download="screen-studio.gif">Download GIF (' + outW + ' × ' + outH + ', ' + totalFrames + ' frames, ' + fmtBytes(blob.size) + ')</a>' +
+        exportResult.innerHTML = '<a class="link-btn" href="' + url + '" download="recnook.gif">Download GIF (' + outW + ' × ' + outH + ', ' + totalFrames + ' frames, ' + fmtBytes(blob.size) + ')</a>' +
           '<img class="gif-preview" alt="GIF preview" src="' + url + '">';
         exportProgressBar.style.width = '100%';
         track('gif_exported', { width: outW, fps: fps, frames: totalFrames });
