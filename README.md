@@ -8,13 +8,13 @@ Screen Studio is a lightweight, all-in-one web-based screen recorder and media e
 
 ## 🔒 The Power of Client-Only Privacy
 
-In an era of cloud-based SaaS tools, Screen Studio takes a radically different approach: **zero server uploads, zero tracking, and zero data collection**.
+In an era of cloud-based SaaS tools, Screen Studio takes a radically different approach: **your files are never uploaded**. The only thing that loads from the network is the page itself and Vercel Web Analytics (page views and a few click events, never your media).
 
 ### Key Benefits of 100% Client-Side Processing:
 
 * **🛡️ Absolute Privacy & Data Sovereignty:** Your recordings, internal company demos, confidential meetings, and personal screenshots never leave your browser memory. No third-party servers ever touch or store your files.
 * **⚡ Instant Processing:** Because there are no upload or download queues over remote servers, exporting media is bounded only by your device's GPU/CPU power.
-* **🌐 True Offline Capability:** Once the web application loads into your browser cache, every single tool (recording, trimming, editing, converting, and OCR) continues to function seamlessly with **no internet connection**.
+* **🌐 True Offline Capability:** After your first visit, a service worker (`sw.js`) saves the app on your device, so every single tool (recording, trimming, editing, converting, and OCR) continues to function seamlessly with **no internet connection**.
 * **🆓 Zero Cost & No Accounts Required:** No paywalls, subscription tiers, watermarks, or sign-up forms.
 * **💼 Enterprise-Safe Compliance:** Ideal for developers, medical professionals, legal teams, and corporate employees working under strict NDA or privacy compliance rules (e.g., GDPR, HIPAA, SOC 2) where uploading screen captures to external servers is strictly prohibited.
 
@@ -27,6 +27,7 @@ In an era of cloud-based SaaS tools, Screen Studio takes a radically different a
 * **Webcam Overlay (Picture-in-Picture):** Embed a circular camera bubble in the bottom corner of your recording for tutorials and presentations.
 * **Dual-Channel Audio Mixer:** Simultaneously record and mix both **System Audio** (what other meeting attendees say) and **Microphone Audio** (external USB mics or headsets) into a single synchronized soundtrack — perfect for Microsoft Teams, Zoom, or Google Meet calls.
 * **Live Voice Teleprompter & Transcriber:** Live speech-to-text captions roll across the screen in real time as you speak, powered by the native Web Speech API.
+* **Recorder controls:** pause and resume, a 3 or 5 second countdown, a live timer, quality (best, 1080p, 720p), 15, 30 or 60 fps, and a cursor on or off switch.
 * **Device Capabilities Detection:** Automatically detects mobile devices or insecure (`file://`) contexts and provides guided fallbacks.
 
 ### ✂️ 2. Trim, Mark & Blur Video Editor
@@ -37,6 +38,9 @@ In an era of cloud-based SaaS tools, Screen Studio takes a radically different a
   * Import and edit standard `.srt` or `.vtt` subtitle files.
   * Export clean `.srt` transcript files.
   * **Burn Captions into Video:** Permanently render styled, word-wrapped caption pills onto video frames upon export.
+* **Blur that follows moving objects:** press *Follow motion* on a box and a template matching tracker moves it with the object. Drag the box to correct it and follow again.
+* **Crop and GIF:** crop the picture, then export a GIF (own encoder, 6 to 15 fps, up to about 30 seconds) with trim, speed, blur, captions and watermark applied.
+* **Export presets:** original, YouTube 1080p, Slack or Teams 720p, and a small file for chat apps (about 10 MB). WebM, plus MP4 where the browser supports it, with a size estimate.
 * **Pro Export Controls:** Adjust playback speed from `0.5x` slow-motion to `4.0x` time-lapse.
 * **Custom Watermarking:** Upload a custom logo/watermark and anchor it to any corner of the video.
 * **Mute/Remove Audio:** One-click option to strip all background audio and export silent WebM videos.
@@ -249,3 +253,25 @@ git push origin feature/my-feature
 
 If you find this project helpful, consider giving it a ⭐ on GitHub.
   
+
+
+---
+
+## 🧱 Files
+
+| File | Purpose |
+|---|---|
+| `index.html` | Home page: hero, features, FAQ, and the studio with all tools. Keeps the Vercel Analytics snippet. |
+| `screen-recorder.html`, `blur-and-trim-video.html`, `audio-trimmer.html`, `screenshot-annotate-ocr.html`, `combine-videos-images.html` | One search page per tool, each with its own FAQ and structured data. Their buttons open the tool on the home page. |
+| `privacy.html`, `404.html` | Plain language privacy page and a not found page. |
+| `styles.css` | The whole design (light and dark). |
+| `app.js` | The tools (record, edit, GIF, audio, screenshot, combine). |
+| `site.js` | Shared page code: theme, menu, animations, analytics events, service worker, install button. |
+| `sw.js`, `manifest.webmanifest` | Offline support and installable app. |
+| `sitemap.xml`, `robots.txt`, `vercel.json` | Search files, clean URLs (`/screen-recorder`) and headers. |
+| `asset/fonts/` | Self hosted Inter (about 45 KB), so the site looks the same offline. |
+
+If you add a page or file that must work offline, add it to `SHELL` in `sw.js` and bump `CACHE_VERSION`.
+
+### Analytics events (Vercel custom events need a Pro or Enterprise plan)
+`hero_start_recording`, `cta_band_start`, `recording_started`, `recording_cancelled`, `recording_failed`, `recording_finished`, `recording_paused`, `recording_downloaded`, `video_exported`, `gif_exported`, `blur_follow_used`, `ocr_used`, `feature_tile_click`, `scroll_depth` (25, 50, 75), `app_installed`.

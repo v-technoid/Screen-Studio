@@ -1,3 +1,5 @@
+# Screen Studio: every public page may be crawled.
 User-agent: *
 Allow: /
+
 Sitemap: https://screen-studio-seven.vercel.app/sitemap.xml

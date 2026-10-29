@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Screenshot Tool: Capture, Annotate, Blur and Copy Text (OCR) | Screen Studio</title>
+  <meta name="description" content="Take a full screen or area screenshot, draw arrows and boxes, blur, crop, convert PNG, JPG, WEBP, and copy text from images with OCR. Runs in your browser.">
+  <link rel="canonical" href="https://screen-studio-seven.vercel.app/screenshot-annotate-ocr">
+  <link rel="alternate" hreflang="en" href="https://screen-studio-seven.vercel.app/screenshot-annotate-ocr">
+  <link rel="alternate" hreflang="x-default" href="https://screen-studio-seven.vercel.app/screenshot-annotate-ocr">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <meta name="theme-color" content="#f6f6fb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#06070c" media="(prefers-color-scheme: dark)">
+  <meta name="color-scheme" content="light dark">
+  <meta name="application-name" content="Screen Studio">
+  <meta name="apple-mobile-web-app-title" content="Screen Studio">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Screen Studio">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:url" content="https://screen-studio-seven.vercel.app/screenshot-annotate-ocr">
+  <meta property="og:title" content="Screenshot Tool: Capture, Annotate, Blur and Copy Text (OCR) | Screen Studio">
+  <meta property="og:description" content="Take a full screen or area screenshot, draw arrows and boxes, blur, crop, convert PNG, JPG, WEBP, and copy text from images with OCR. Runs in your browser.">
+  <meta property="og:image" content="https://screen-studio-seven.vercel.app/asset/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Screen Studio: free online and offline screen recorder">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Screenshot Tool: Capture, Annotate, Blur and Copy Text (OCR) | Screen Studio">
+  <meta name="twitter:description" content="Take a full screen or area screenshot, draw arrows and boxes, blur, crop, convert PNG, JPG, WEBP, and copy text from images with OCR. Runs in your browser.">
+  <meta name="twitter:image" content="https://screen-studio-seven.vercel.app/asset/og-image.png">
+
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" type="image/svg+xml" href="/asset/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/asset/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/asset/favicon-16.png">
+  <link rel="apple-touch-icon" href="/asset/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+
+  <link rel="preload" href="/asset/fonts/inter-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/asset/fonts/inter-800.woff2" as="font" type="font/woff2" crossorigin>
+  <script>try{var t=localStorage.getItem('ss-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+  <link rel="stylesheet" href="/styles.css">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Screenshot Tool: Capture, Annotate, Blur and Copy Text (OCR) | Screen Studio",
+  "url": "https://screen-studio-seven.vercel.app/screenshot-annotate-ocr",
+  "description": "Take a full screen or area screenshot, draw arrows and boxes, blur, crop, convert PNG, JPG, WEBP, and copy text from images with OCR. Runs in your browser.",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Screen Studio",
+    "url": "https://screen-studio-seven.vercel.app/"
+  },
+  "dateModified": "2026-10-28",
+  "about": {
+    "@type": "SoftwareApplication",
+    "name": "Screen Studio",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "Any modern browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Screen Studio",
+      "item": "https://screen-studio-seven.vercel.app/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Screenshot and OCR",
+      "item": "https://screen-studio-seven.vercel.app/screenshot-annotate-ocr"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I copy text from a screenshot?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Load the image and press Extract text. You can draw a box first to read only part of it, then copy the result."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does the OCR upload my image?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. The text is read in your browser. Only the OCR language data is downloaded the first time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I blur part of a screenshot?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Use the blur tool on the area, then save the image."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which image formats can I save?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "PNG, JPG, WEBP and BMP."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it work on a phone?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Uploading, annotating and converting work. Screen capture needs a desktop browser."
+      }
+    }
+  ]
+}
+  </script>
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/" aria-label="Screen Studio home"><span class="brand-mark" aria-hidden="true"><i></i></span>Screen Studio</a>
+      <nav class="topnav" aria-label="Main">
+        <a href="/#features">Features</a>
+        <div class="menu">
+          <button class="menu-btn" type="button" aria-haspopup="true">Tools <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+          <div class="menu-panel"><a href="/screen-recorder"><span class="mi"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5" fill="currentColor"/></svg></span><span><b>Screen recorder</b><small>Record screen, webcam and audio</small></span></a><a href="/blur-and-trim-video"><span class="mi"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 15l5-5 4 4 3-3 6 6"/></svg></span><span><b>Blur and trim video</b><small>Trim, blur moving objects, GIF and MP4</small></span></a><a href="/audio-trimmer"><span class="mi"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v0M8 8v8M12 4v16M16 8v8M20 12v0"/></svg></span><span><b>Audio trimmer</b><small>Cut any audio file to a WAV</small></span></a><a href="/screenshot-annotate-ocr"><span class="mi"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span><span><b>Screenshot and OCR</b><small>Annotate, crop, convert, copy text</small></span></a><a href="/combine-videos-images"><span class="mi"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/><path d="M8 13v3a2 2 0 0 0 2 2h3M16 11V8a2 2 0 0 0-2-2h-3"/></svg></span><span><b>Combine media</b><small>Join videos, images and slideshows</small></span></a></div>
+        </div>
+        <a href="/#how">How it works</a>
+        <a href="/#faq">FAQ</a>
+      </nav>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="themeToggleBtn" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
+        <a class="btn primary nav-cta" href="/#record">Open studio</a>
+        <button class="hamburger" id="hamburgerBtn" aria-label="Open menu"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <nav class="topnav-mobile" id="mobileNav" aria-label="Mobile">
+      <a href="/#features">Features</a>
+      <a href="/screen-recorder">Screen recorder</a><a href="/blur-and-trim-video">Blur and trim video</a><a href="/audio-trimmer">Audio trimmer</a><a href="/screenshot-annotate-ocr">Screenshot and OCR</a><a href="/combine-videos-images">Combine media</a>
+      <a href="/#how">How it works</a>
+      <a href="/#faq">FAQ</a>
+      <a href="/privacy">Privacy</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="pg-hero">
+      <div class="hx-bg" aria-hidden="true"><span class="aurora a1"></span><span class="aurora a2"></span><span class="hx-grid"></span></div>
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Screen Studio</a><span aria-hidden="true">/</span><span aria-current="page">Screenshot and OCR</span></nav>
+      <h1 id="heroTitle"><span class="hero-word">Screenshot</span> <span class="hero-word">tool</span> <span class="hero-word">with</span> <span class="hero-word">annotation</span> <span class="hero-word">and</span> <span class="hero-word">text</span> <span class="hero-word">extraction</span> </h1>
+      <p class="pg-lead">Capture your screen or an area, mark it up with arrows, boxes, circles and text, blur private parts, crop it, and copy the words out of any image.</p>
+      <div class="hx-cta">
+        <a class="btn primary btn-lg btn-glow" href="/#screenshot" data-track="page_cta_screenshot-annotate-ocr"><span class="btn-label">Open the screenshot tool</span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn btn-lg btn-ghost" href="#how-to">How it works</a>
+      </div>
+      <div class="pg-viz reveal" aria-hidden="true"><div class="bento-viz"><div class="v-ocr"><div class="o-img"><p>Invoice no. 2041</p><p>Total due 1,240.00</p><i></i></div><div class="o-out"><p>Invoice no. 2041</p><p>Total due 1,240.00</p></div></div></div></div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head reveal"><p class="kicker">What you can do</p><h2>Screenshot and OCR features</h2></div>
+      <div class="pg-grid">
+        <div class="pg-card reveal"><span class="bento-ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span><h3>Full screen or area</h3><p>Capture a whole screen, or drag out just the part you need.</p></div>
+        <div class="pg-card reveal"><span class="bento-ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 15l5-5 4 4 3-3 6 6"/></svg></span><h3>Annotate</h3><p>Draw arrows, boxes and circles and add text in the colour you choose.</p></div>
+        <div class="pg-card reveal"><span class="bento-ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 15l5-5 4 4 3-3 6 6"/></svg></span><h3>Blur and crop</h3><p>Hide private details and cut the picture down after you take it.</p></div>
+        <div class="pg-card reveal"><span class="bento-ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span><h3>Copy text (OCR)</h3><p>Pull the words out of a screenshot or any image. Select a box to read only that area.</p></div>
+        <div class="pg-card reveal"><span class="bento-ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span><h3>Paste or upload</h3><p>Press Ctrl+V to paste an image, or upload one from your computer.</p></div>
+        <div class="pg-card reveal"><span class="bento-ic"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span><h3>Format converter</h3><p>Save as PNG, JPG, WEBP or BMP, or copy to the clipboard.</p></div>
+      </div>
+    </section>
+
+    <section class="sec" id="how-to">
+      <div class="sec-head reveal"><p class="kicker">How to</p><h2>Use the screenshot and ocr in 4 steps</h2></div>
+      <ol class="how-steps">
+        <li class="reveal"><span class="n">1</span><div><h3>Get an image</h3><p>Capture the screen or an area, upload a file, or paste with Ctrl+V.</p></div></li>
+        <li class="reveal"><span class="n">2</span><div><h3>Mark it up</h3><p>Use the tools to add arrows, boxes, circles, text and blur. Crop if you need to.</p></div></li>
+        <li class="reveal"><span class="n">3</span><div><h3>Copy text if you need it</h3><p>Press Extract text. Draw a box first to read only that part.</p></div></li>
+        <li class="reveal"><span class="n">4</span><div><h3>Save</h3><p>Choose a format and download, or copy the picture to your clipboard.</p></div></li>
+      </ol>
+    </section>
+
+    <section class="sec" style="padding-top:40px">
+      <div class="note-card reveal"><h3>Good to know</h3><ul>
+        <li>Capturing the screen needs a desktop browser. Uploading and pasting images works on phones too.</li>
+        <li>Text extraction downloads its language data the first time. Use it once while online and it works offline after that.</li>
+        <li>OCR is best on clear, printed text. Handwriting and tiny text may come out wrong.</li>
+      </ul></div>
+    </section>
+
+    <section class="sec" id="faq">
+      <div class="sec-head reveal"><p class="kicker">FAQ</p><h2>Questions about the screenshot and ocr</h2></div>
+      <div class="faq-list faq-wide">
+        <details class="faq-item"><summary>How do I copy text from a screenshot?</summary><p>Load the image and press Extract text. You can draw a box first to read only part of it, then copy the result.</p></details>
+        <details class="faq-item"><summary>Does the OCR upload my image?</summary><p>No. The text is read in your browser. Only the OCR language data is downloaded the first time.</p></details>
+        <details class="faq-item"><summary>Can I blur part of a screenshot?</summary><p>Yes. Use the blur tool on the area, then save the image.</p></details>
+        <details class="faq-item"><summary>Which image formats can I save?</summary><p>PNG, JPG, WEBP and BMP.</p></details>
+        <details class="faq-item"><summary>Does it work on a phone?</summary><p>Uploading, annotating and converting work. Screen capture needs a desktop browser.</p></details>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head reveal"><p class="kicker">More tools</p><h2>Everything runs in your browser</h2></div>
+      <div class="related">
+        <a class="reveal" href="/screen-recorder"><b>Screen recorder</b><small>Record screen, webcam and audio</small></a>
+        <a class="reveal" href="/blur-and-trim-video"><b>Blur and trim video</b><small>Trim, blur moving objects, GIF and MP4</small></a>
+        <a class="reveal" href="/combine-videos-images"><b>Combine media</b><small>Join videos, images and slideshows</small></a>
+        <a class="reveal" href="/audio-trimmer"><b>Audio trimmer</b><small>Cut any audio file to a WAV</small></a>
+      </div>
+    </section>
+
+    <section class="cta-band reveal">
+      <div class="cta-inner">
+        <h2>Ready when you are.</h2>
+        <p>Open the studio, press record, and everything stays on your device.</p>
+        <a class="btn primary btn-lg btn-glow" href="/#screenshot" data-start-recording data-track="cta_band_start"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg><span class="btn-label">Start recording</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="ft">
+    <div class="ft-inner">
+      <div class="ft-brand">
+        <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"><i></i></span>Screen Studio</a>
+        <p>Free tools to record, trim, blur and annotate your screen. Everything runs in your browser tab, so your files are never uploaded.</p>
+      </div>
+      <div class="ft-col"><p class="ft-h">Tools</p><a href="/screen-recorder">Screen recorder</a><a href="/blur-and-trim-video">Blur and trim video</a><a href="/audio-trimmer">Audio trimmer</a><a href="/screenshot-annotate-ocr">Screenshot and OCR</a><a href="/combine-videos-images">Combine media</a></div>
+      <div class="ft-col"><p class="ft-h">Explore</p>
+        <a href="/#features">Features</a><a href="/#how">How it works</a><a href="/#faq">FAQ</a><a href="/privacy">Privacy</a>
+        <a href="https://github.com/v-technoid/Screen-Studio" target="_blank" rel="noopener">GitHub</a>
+      </div>
+      <div class="ft-col"><p class="ft-h">Good to know</p>
+        <span>No sign up, ever</span><span>Your files never leave this device</span><span>Works offline after your first visit</span>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span>&copy; <span id="copyrightYear">2026</span> Screen Studio</span>
+      <span>Last updated <time datetime="2026-10-28">October 2026</time></span>
+      <span id="visitCounter" class="visit-counter"></span>
+    </div>
+  </footer>
+
+  <div class="toast-host" id="toastHost" role="status" aria-live="polite"></div>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  <script src="/site.js" defer></script>
+</body>
+</html>
