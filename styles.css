@@ -881,3 +881,42 @@ input[type=file]::file-selector-button{ background:var(--field); }
 .btn-ghost:hover{ background:var(--panel); border-color:var(--accent); transform:translateY(-2px); box-shadow:0 14px 28px -14px rgba(91,91,246,.55); }
 .btn-ghost:active{ transform:translateY(0); }
 html[data-theme="dark"] .btn-ghost{ background:color-mix(in srgb,var(--panel) 70%,transparent); border-color:color-mix(in srgb,var(--accent) 45%,var(--line)); box-shadow:none; }
+
+/* ---- checkboxes: clearly a box you can tick, in the brand color ---- */
+:root{ --on-accent:#ffffff; --good:#16a34a; --bad:#e11d48; }
+html[data-theme="dark"]{ --on-accent:#0a0b18; --good:#4ade80; --bad:#fb7185; }
+input[type="checkbox"]{
+  -webkit-appearance:none; appearance:none; margin:0; flex-shrink:0; cursor:pointer;
+  width:22px !important; height:22px !important; border-radius:7px;
+  border:2px solid color-mix(in srgb,var(--accent) 60%,var(--line));
+  background:var(--panel); display:inline-grid; place-content:center;
+  transition:background-color .18s ease, border-color .18s ease, box-shadow .2s ease, transform .15s ease;
+}
+input[type="checkbox"]::after{
+  content:""; width:11px; height:6px; margin-top:-2px;
+  border-left:3px solid var(--on-accent); border-bottom:3px solid var(--on-accent);
+  transform:rotate(-45deg) scale(0); transform-origin:center; transition:transform .2s cubic-bezier(.34,1.56,.64,1);
+}
+input[type="checkbox"]:hover{ border-color:var(--accent); box-shadow:0 0 0 4px var(--accent-soft); }
+input[type="checkbox"]:active{ transform:scale(.92); }
+input[type="checkbox"]:checked{ background:var(--accent); border-color:var(--accent); }
+input[type="checkbox"]:checked::after{ transform:rotate(-45deg) scale(1); }
+input[type="checkbox"]:focus-visible{ outline:3px solid color-mix(in srgb,var(--accent) 50%,transparent); outline-offset:2px; }
+input[type="checkbox"]:disabled{ opacity:.45; cursor:not-allowed; }
+.audio-toggle-card:hover{ border-color:var(--accent); }
+.rec-check:has(input:checked), .pro-control-box:has(input[type="checkbox"]:checked){ border-color:color-mix(in srgb,var(--accent) 55%,var(--line)); background:var(--accent-soft); }
+
+/* ---- comparison table: clear yes and no, brand colored header ---- */
+.cmp{ background:var(--panel); border-color:var(--line); }
+.cmp-head{ background:var(--bg-soft); color:var(--muted); }
+.cmp-head span:last-child{ background:var(--accent); color:var(--on-accent); font-size:14px; letter-spacing:.01em; }
+.cmp-row{ background:var(--panel); }
+.cmp-row:nth-child(even){ background:color-mix(in srgb,var(--bg-soft) 45%,var(--panel)); }
+.cmp-row span:first-child{ color:var(--text); }
+.cmp-row .no, .cmp-row .yes{ display:flex; align-items:center; gap:10px; }
+.cmp-row .no{ color:var(--muted); font-weight:500; }
+.cmp-row .no::before{ content:"\2715"; display:inline-grid; place-items:center; flex-shrink:0; width:22px; height:22px; border-radius:50%; font-size:11px; font-weight:800; color:var(--bad); background:color-mix(in srgb,var(--bad) 14%,transparent); }
+.cmp-row .yes{ color:var(--text); font-weight:700; background:color-mix(in srgb,var(--good) 11%,var(--panel)); border-left:1px solid color-mix(in srgb,var(--good) 25%,var(--line)); }
+.cmp-row:nth-child(even) .yes{ background:color-mix(in srgb,var(--good) 14%,var(--panel)); }
+.cmp-row .yes::before{ content:"\2713"; display:inline-grid; place-items:center; flex-shrink:0; width:22px; height:22px; margin:0; border-radius:50%; font-size:12px; font-weight:800; color:#fff; background:var(--good); }
+html[data-theme="dark"] .cmp-row .yes::before{ color:#052e16; }
