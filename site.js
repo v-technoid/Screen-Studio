@@ -45,7 +45,7 @@
           if(on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
           var grp = a.closest('.sn-group');
           if(grp) grp.classList.toggle('active', on);
-          if(on && a.closest('.tool-chips')){ try{ a.scrollIntoView({ inline: 'center', block: 'nearest' }); }catch(e){} }
+          if(on){ var row = a.closest('.tool-chips'); if(row){ var left = a.offsetLeft - (row.clientWidth - a.offsetWidth) / 2; if(Math.abs(row.scrollLeft - left) > 4){ try{ row.scrollTo({ left: left, behavior: 'auto' }); }catch(e){ row.scrollLeft = left; } } } }
         });
       });
     }, { rootMargin: '-40% 0px -50% 0px' });
