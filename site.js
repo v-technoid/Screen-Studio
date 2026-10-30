@@ -152,7 +152,7 @@
       themeToggleBtn.setAttribute('aria-label', t === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
     }
     // keep the browser bar color in step with a manual choice, not only the system setting
-    themeColorMetas.forEach(function(m){ m.setAttribute('content', t === 'dark' ? '#06070c' : '#f6f6fb'); m.removeAttribute('media'); });
+    themeColorMetas.forEach(function(m){ m.setAttribute('content', t === 'dark' ? '#06070c' : '#eceef7'); m.removeAttribute('media'); });
   }
   var savedTheme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
   try{ savedTheme = localStorage.getItem('ss-theme') || savedTheme; }catch(e){}

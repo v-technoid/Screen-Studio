@@ -11,7 +11,7 @@
  * Deploying a change: nothing to do for normal edits, files refresh on the next online visit.
  * If you ADD a page or file that must work offline, add it to SHELL below and bump CACHE_VERSION.
  */
-const CACHE_VERSION = 'v10';
+const CACHE_VERSION = 'v12';
 const SHELL_CACHE = 'ss-shell-' + CACHE_VERSION;
 const RUNTIME_CACHE = 'ss-runtime-' + CACHE_VERSION;
 
